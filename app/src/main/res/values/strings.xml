@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Wehere</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="google_app_id">Map</string>
+
+    <string name="reg">Регистрация</string>
+    <string name="login">Войти</string>
+    <string name="hint_password">Пароль</string>
+    <string name="hint_password_retry">Пароль еще раз</string>
+    <string name="hint_login">Логин</string>
+
+    <!-- code error-->
+    <string name="error_1">пользователь уже существует</string>
+    <string name="error_2">логин или пароль не верны</string>
+    <string name="error_3">пароли не совпадают</string>
+    <string name="error_4">этот ребенок уже есть в базе</string>
+    <string name="error_0">неизвестная ошибка</string>
+
+
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="size_login_button">216dp</dimen>
+    <dimen name="bottom_login">46dp</dimen>
+</resources>

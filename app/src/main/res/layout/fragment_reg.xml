@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_margin="16dp">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/loginReg"
+            app:met_floatingLabel="highlight"
+            android:hint="@string/hint_login"
+            android:layout_marginBottom="8dp" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            app:met_floatingLabel="highlight"
+            android:ems="10"
+            android:id="@+id/password1"
+            android:hint="@string/hint_password" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            app:met_floatingLabel="highlight"
+            android:ems="10"
+            android:id="@+id/password2"
+            android:hint="@string/hint_password_retry" />
+
+    </LinearLayout>
+
+    <com.hkm.ui.processbutton.iml.ActionProcessButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/reg"
+        android:textColor="#BBDEFB"
+        android:background="#42A5F5"
+        android:id="@+id/btn_Reg"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="-4dp" />
+
+</LinearLayout>
