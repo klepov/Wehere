@@ -14,6 +14,8 @@
     <string name="error_2">логин или пароль не верны</string>
     <string name="error_3">пароли не совпадают</string>
     <string name="error_4">этот ребенок уже есть в базе</string>
+    <string name="error_5">Пользователь не существует</string>
+    <string name="error_6">Войдите в аккаунт</string>
     <string name="error_0">неизвестная ошибка</string>
 
 

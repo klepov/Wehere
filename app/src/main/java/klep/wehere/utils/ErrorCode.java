@@ -20,6 +20,8 @@ public class ErrorCode {
         CODE_ERROR.put(2, R.string.error_2);
         CODE_ERROR.put(3, R.string.error_3);
         CODE_ERROR.put(4, R.string.error_4);
+        CODE_ERROR.put(5, R.string.error_5);
+        CODE_ERROR.put(6, R.string.error_6);
     }
 
 

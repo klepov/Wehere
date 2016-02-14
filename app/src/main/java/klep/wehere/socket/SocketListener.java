@@ -1,18 +1,26 @@
 package klep.wehere.socket;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
+import klep.wehere.engine.EngineActivity;
+import klep.wehere.engine.EnginePresenter;
 import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -21,28 +29,49 @@ import rx.schedulers.Schedulers;
  */
 public class SocketListener extends WebSocketAdapter {
 
-    WebSocket mWebSocket;
+    private static final String AUTH = "auth";
+    private static final String RELATION = "list_relation";
+    private static final String UPDATE = "update";
+    private Context context;
 
-    @Override
-    public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-        super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
-        EventBus.getDefault().unregister(this);
-    }
-
-    public void onEvent(MessageEvent event){
-        mWebSocket.sendText(event.json);
-    }
-
-    @Override
-    public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-        Log.d("tru","connect");
-        EventBus.getDefault().register(this);
-        mWebSocket = websocket;
+    public SocketListener(Context context) {
+        this.context = context;
     }
 
     @Override
     public void onTextMessage(WebSocket websocket, String text) throws Exception {
+        parserJSON(text);
+    }
 
-        Log.d("devices",text);
+    private void parserJSON(String text) {
+        try {
+            JSONObject json = new JSONObject(text);
+            String method = json.getString("method");
+
+            switch (method){
+                case AUTH:
+
+                    try {
+                        int code = new JSONObject(json.getString("data")).getInt("code");
+                        Intent intent = new Intent(EngineActivity.WS_AUTH);
+                        intent.putExtra(EngineActivity.WS_AUTH,code);
+
+                        Log.d("text",""+code);
+
+                        context.sendBroadcast(intent);
+                    }catch (JSONException e){
+
+                    }
+
+
+                    break;
+                case RELATION:
+                    break;
+                case UPDATE:
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

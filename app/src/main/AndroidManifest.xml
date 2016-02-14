@@ -30,7 +30,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name=".chooseLogin.ActivityChooseLogin"
+            android:name=".engine.EngineActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -42,7 +42,7 @@ public class RegPresenter extends MvpBasePresenter<RegView> {
 
             @Override
             public void onNext(ErrorHandlerModel errorHandlerModel) {
-                if (errorHandlerModel.getData().getCode() == 99){
+                if (errorHandlerModel.getData().getCode() == 99 && isViewAttached()){
                     getView().showRegComplete();
                 }
 
