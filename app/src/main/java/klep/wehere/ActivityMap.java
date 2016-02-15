@@ -19,12 +19,12 @@
 //        setContentView(R.layout.activity_fragment);
 //
 //        startService(new Intent(this, HandlerSocket.class));
-////        FragmentMap.newInstance();
+////        MapFragment.newInstance();
 //
 ////        Websocket.start();
 ////        FragmentManager manager = getFragmentManager();
 ////        manager.beginTransaction()
-////                .add(R.id.place,new FragmentMap())
+////                .add(R.id.place,new MapFragment())
 ////        .commit();
 //    }
 //}

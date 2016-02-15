@@ -51,20 +51,13 @@ public class SocketListener extends WebSocketAdapter {
             switch (method){
                 case AUTH:
 
-                    try {
-                        int code = new JSONObject(json.getString("data")).getInt("code");
-                        Intent intent = new Intent(EngineActivity.WS_AUTH);
-                        intent.putExtra(EngineActivity.WS_AUTH,code);
+                    int code = new JSONObject(json.getString("data")).getInt("code");
+                    Intent intent = new Intent(EnginePresenter.EngineReceiver);
+                    intent.putExtra(EnginePresenter.WS_AUTH,code);
 
-                        Log.d("text",""+code);
-
-                        context.sendBroadcast(intent);
-                    }catch (JSONException e){
-
-                    }
-
-
+                    context.sendBroadcast(intent);
                     break;
+
                 case RELATION:
                     break;
                 case UPDATE:

@@ -5,7 +5,7 @@ import android.app.FragmentManager;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.util.Log;
 
-import klep.wehere.FragmentMap;
+import klep.wehere.maps.MapFragment;
 
 /**
  * Created by klep.io on 14.02.16.
@@ -31,12 +31,12 @@ public class TabsPagerFragmentAdapter extends FragmentPagerAdapter{
 
         switch (position) {
             case 0:
-                return FragmentMap.newInstance();
+                return new MapFragment();
             case 1:
-                return FragmentMap.newInstance();
+                return MapFragment.newInstance();
 
             case 2:
-                return FragmentMap.newInstance();
+                return MapFragment.newInstance();
 
 
 
