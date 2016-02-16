@@ -1,6 +1,8 @@
 package klep.wehere.auth;
 
 import android.animation.LayoutTransition;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +25,7 @@ import com.hkm.ui.processbutton.iml.ActionProcessButton;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import klep.wehere.HandleActivity;
 import klep.wehere.R;
 import klep.wehere.common.BaseViewStateFragment;
 import klep.wehere.utils.ErrorCode;
@@ -49,6 +52,13 @@ public class AuthLoginFragment extends BaseViewStateFragment<AuthView,AuthPresen
     ViewGroup authForm;
 
 
+    private AuthOk authOk;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        authOk = (AuthOk)activity;
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -137,11 +147,7 @@ public class AuthLoginFragment extends BaseViewStateFragment<AuthView,AuthPresen
         authButton.setProgress(0);
     }
 
-    private void setFormEnabled(boolean enabled){
-        authLogin.setEnabled(enabled);
-        authPassword.setEnabled(enabled);
-        authButton.setEnabled(enabled);
-    }
+
 
     @Override
     public void showError(int error) {
@@ -161,6 +167,16 @@ public class AuthLoginFragment extends BaseViewStateFragment<AuthView,AuthPresen
     public void authSuccessful() {
         Snackbar.make(getView(),"OKAY",Snackbar.LENGTH_LONG)
                 .show();
+        authOk.ok();
+    }
+
+    public interface AuthOk{
+        void ok();
+    }
+    private void setFormEnabled(boolean enabled){
+        authLogin.setEnabled(enabled);
+        authPassword.setEnabled(enabled);
+        authButton.setEnabled(enabled);
     }
 
 }
