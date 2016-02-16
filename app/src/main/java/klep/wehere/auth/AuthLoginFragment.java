@@ -79,7 +79,7 @@ public class AuthLoginFragment extends BaseViewStateFragment<AuthView,AuthPresen
     @NonNull
     @Override
     public AuthPresenter createPresenter() {
-        return new AuthPresenter();
+        return new AuthPresenter(getActivity());
     }
 
     @OnClick (R.id.btn_auth) public void onAuthClicked(){

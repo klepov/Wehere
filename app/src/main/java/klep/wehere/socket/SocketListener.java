@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
-import klep.wehere.engine.EngineActivity;
+import klep.wehere.auth.AuthPresenter;
 import klep.wehere.engine.EnginePresenter;
 import rx.Observable;
 import rx.Subscriber;
@@ -52,8 +52,8 @@ public class SocketListener extends WebSocketAdapter {
                 case AUTH:
 
                     int code = new JSONObject(json.getString("data")).getInt("code");
-                    Intent intent = new Intent(EnginePresenter.EngineReceiver);
-                    intent.putExtra(EnginePresenter.WS_AUTH,code);
+                    Intent intent = new Intent(AuthPresenter.EngineReceiver);
+                    intent.putExtra(AuthPresenter.WS_AUTH,code);
 
                     context.sendBroadcast(intent);
                     break;
