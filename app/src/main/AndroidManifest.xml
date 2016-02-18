@@ -53,9 +53,9 @@
             android:exported="true" />
 
         <activity
-            android:name=".HandleActivity"
+            android:name=".maps.HandleActivity"
             android:label="@string/title_activity_handle"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

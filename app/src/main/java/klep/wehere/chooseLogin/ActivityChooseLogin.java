@@ -18,6 +18,7 @@ import butterknife.OnClick;
 import klep.wehere.R;
 import klep.wehere.auth.AuthActivity;
 import klep.wehere.registration.RegActivity;
+import klep.wehere.services.HandlerSocket;
 import klep.wehere.utils.ErrorCode;
 
 /**
@@ -30,6 +31,8 @@ public class ActivityChooseLogin extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_login);
         ButterKnife.bind(this);
+
+        startService(new Intent(this, HandlerSocket.class));
     }
 
 

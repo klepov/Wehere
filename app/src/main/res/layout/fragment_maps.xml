@@ -2,9 +2,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
+    <fragment
+        android:id="@+id/map1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="com.google.android.gms.maps.SupportMapFragment" />
+        android:layout_margin="3dp"
+        android:layout_weight="2"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
 </LinearLayout>

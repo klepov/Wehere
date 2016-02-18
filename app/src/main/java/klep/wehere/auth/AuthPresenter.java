@@ -65,7 +65,7 @@ public class AuthPresenter extends MvpBasePresenter<AuthView> {
                     // TODO: 17.02.16 сделать проверку на логин
                     SendJSONToServer.sendJsonToServer
                             (CreateJSON.auth(login));
-                    getView().authSuccessful();
+//                    getView().authSuccessful();
                 }
 
                 getView().showError(errorCode.getData().getCode());

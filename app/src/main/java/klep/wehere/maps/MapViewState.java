@@ -25,7 +25,7 @@ public class MapViewState implements ViewState<MapView> {
                 view.showMap();
                 break;
             case STATE_UPDATE:
-                view.showUpdate();
+                view.showUpdate(null);
                 break;
             case STATE_SHOW_LOADING:
                 view.showLoading();

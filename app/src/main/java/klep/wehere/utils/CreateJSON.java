@@ -27,4 +27,31 @@ public class CreateJSON {
         Log.d("method",""+method);
         return method;
     }
+
+    public static JSONObject listRelation(String login){
+        JSONObject data = new JSONObject();
+        JSONObject method = new JSONObject();
+
+        try {
+            method.put("method","list_relation");
+
+            data.put("username",login);
+
+            method.put("data",data);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d("method",""+method);
+        return method;
+    }
+
+
+
+//    {
+//        "method": "auth",
+//            "data": {
+//        "username": "dima"
+//    }
+//    }
 }
