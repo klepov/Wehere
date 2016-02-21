@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import de.greenrobot.event.EventBus;
 import klep.wehere.socket.MessageEvent;
-import klep.wehere.socket.SocketListener;
+import klep.wehere.socket.SocketAdapter;
 import klep.wehere.utils.Const;
 
 public class HandlerSocket extends Service implements GoogleApiClient.ConnectionCallbacks, com.google.android.gms.location.LocationListener {
@@ -72,7 +72,7 @@ public class HandlerSocket extends Service implements GoogleApiClient.Connection
             try {
                 synchronized (HandlerSocket.class) {
                     ws = new WebSocketFactory().createSocket(Const.WS_URL);
-                    ws.addListener(new SocketListener(getApplicationContext()));
+                    ws.addListener(new SocketAdapter(getApplicationContext()));
                     ws.connect();
                 }
             } catch (IOException | WebSocketException e) {

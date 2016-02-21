@@ -8,8 +8,14 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import klep.wehere.model.user.Datum;
-import klep.wehere.model.user.Users;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import klep.wehere.model.user.User;
+import klep.wehere.model.users.Data;
+import klep.wehere.model.users.Users;
 import klep.wehere.utils.CreateJSON;
 import klep.wehere.utils.SendJSONToServer;
 
@@ -19,10 +25,12 @@ import klep.wehere.utils.SendJSONToServer;
 public class MapPresenter extends MvpBasePresenter<MapView> {
 
     public static final String GET_RELATIONS = "GET_RELATIONS";
+    public static final String GET_UPDATE_USER = "GET_UPDATE_USER";
     private Context context;
     BroadcastReceiver mapReceiver;
-    public final static String TAG_RECEIVER = "MapReceiver.class";
+    public final static String ABSTRACT_USER = "MapReceiver.class";
 
+    private List<Data> user;
     public MapPresenter(Context context) {
         super();
         this.context = context;
@@ -31,6 +39,7 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
     @Override
     public void attachView(MapView view) {
         super.attachView(view);
+        user = new ArrayList<>();
         regReceiver();
     }
 
@@ -49,14 +58,35 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
         mapReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Users u = intent.getExtras().getParcelable(GET_RELATIONS);
+                Data dataUser;
+                switch (intent.getAction()){
+                    case GET_RELATIONS:
+                        Users userRelation = intent.getExtras().getParcelable(ABSTRACT_USER);
+                        user.addAll(userRelation.getData());
+                        break;
 
-                getView().showUpdate(u);
+
+                    case GET_UPDATE_USER:
+                        User updateUser = intent.getExtras().getParcelable(ABSTRACT_USER);
+                        dataUser = updateUser.getData();
+                        user.add(dataUser);
+                        break;
+
+
+                }
+                getView().showUpdate(user);
+                user.clear();
+
+
+
+//                Users u = intent.getExtras().getParcelable(GET_RELATIONS);
+//                getView().showUpdate(u);
             }
         };
 
-        IntentFilter intentFilter = new IntentFilter(TAG_RECEIVER);
+        IntentFilter intentFilter = new IntentFilter(ABSTRACT_USER);
         intentFilter.addAction(GET_RELATIONS);
+        intentFilter.addAction(GET_UPDATE_USER);
         context.registerReceiver(mapReceiver,intentFilter);
     }
 }

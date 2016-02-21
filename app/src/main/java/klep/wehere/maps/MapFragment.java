@@ -2,7 +2,6 @@
 package klep.wehere.maps;
 
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,15 +12,21 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import klep.wehere.R;
 import klep.wehere.common.BaseViewStateFragment;
 import klep.wehere.common.LoadingDialogFragment;
-import klep.wehere.model.user.Datum;
-import klep.wehere.model.user.Users;
+import klep.wehere.model.user.User;
+import klep.wehere.model.users.Data;
+import klep.wehere.model.users.Users;
 
 /**
  * Created by klep.io on 07.01.16.
@@ -29,6 +34,7 @@ import klep.wehere.model.user.Users;
 public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         implements MapView {
 
+    private Map<String,Data> users;
 
     private GoogleMap map;
     Polygon polygon;
@@ -48,10 +54,9 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
-//        mapView = (com.google.android.gms.maps.MapView) view.findViewById(R.id.mapView);
-//        mapView.onCreate(savedInstanceState);
-//        mapView.onResume();
+
         setUpMapIfNeeded();
+        users = new HashMap<>();
         return view;
     }
 
@@ -69,6 +74,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     public void onResume() {
         super.onResume();
 //        mapView.onResume();
+
         presenter.getRelation("chil");
     }
 
@@ -102,13 +108,16 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     }
 
     @Override
-    public void showUpdate(Users users) {
-        int size = users.getData().size();
+    public void showUpdate(List<Data> users) {
 
-        for (int i = 0; i<size; i++){
-            double latitude = users.getData().get(i).getLatitude();
-            double longitude = users.getData().get(i).getLongitude();
-            map.addPolygon(new PolygonOptions().add(new LatLng(latitude,longitude)));
+//        int size = users.getData().size();
+//
+        for (int i = 0; i<users.size(); i++){
+
+            double latitude = users.get(i).getLatitude();
+            double longitude = users.get(i).getLongitude();
+
+            map.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
         }
     }
 
