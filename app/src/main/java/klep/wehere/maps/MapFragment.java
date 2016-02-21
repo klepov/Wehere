@@ -12,14 +12,17 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import klep.wehere.R;
 import klep.wehere.common.BaseViewStateFragment;
@@ -34,7 +37,7 @@ import klep.wehere.model.users.Users;
 public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         implements MapView {
 
-    private Map<String,Data> users;
+    private List<Data> users;
 
     private GoogleMap map;
     Polygon polygon;
@@ -56,7 +59,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
 
         setUpMapIfNeeded();
-        users = new HashMap<>();
+        users = new ArrayList<>();
         return view;
     }
 
@@ -108,16 +111,33 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     }
 
     @Override
-    public void showUpdate(List<Data> users) {
+    public void showUpdate(List<Data> usersList) {
 
 //        int size = users.getData().size();
 //
+        for (int newUser = 0;newUser<usersList.size();newUser++){
+
+            for (int oldUser =0; oldUser < users.size();oldUser++){
+
+                if (users.get(oldUser).getDeviceID().equals(usersList.get(newUser).getDeviceID())){
+                    users.remove(oldUser);
+                }
+            }
+        }
+
+        users.addAll(usersList);
+
+
+        map.clear();
+
         for (int i = 0; i<users.size(); i++){
 
             double latitude = users.get(i).getLatitude();
             double longitude = users.get(i).getLongitude();
 
-            map.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
+            Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
+
+
         }
     }
 
