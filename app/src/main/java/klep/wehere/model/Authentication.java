@@ -20,4 +20,9 @@ public interface Authentication {
                                         @Field("password1")String password1,
                                                @Field("password2")String password2);
 
+    @FormUrlEncoded
+    @POST("api/add/child/")
+    Observable<ErrorHandlerModel> registrationChild(@Field("name_child")String username,
+                                                    @Field("password1")String password1,
+                                                    @Field("password2")String password2);
 }

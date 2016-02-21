@@ -2,9 +2,10 @@
 package klep.wehere.maps;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,22 +15,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polygon;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import klep.wehere.R;
+import klep.wehere.addChildren.RegActivityChild;
 import klep.wehere.common.BaseViewStateFragment;
 import klep.wehere.common.LoadingDialogFragment;
-import klep.wehere.model.user.User;
 import klep.wehere.model.users.Data;
-import klep.wehere.model.users.Users;
+import klep.wehere.registration.RegActivity;
 
 /**
  * Created by klep.io on 07.01.16.
@@ -40,7 +39,8 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     private List<Data> users;
 
     private GoogleMap map;
-    Polygon polygon;
+
+
 
     public static MapFragment newInstance(){
         MapFragment fragmentMap = new MapFragment();
@@ -53,6 +53,12 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         return R.layout.fragment_maps;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,6 +66,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
         setUpMapIfNeeded();
         users = new ArrayList<>();
+        ButterKnife.bind(this,view);
         return view;
     }
 
@@ -87,6 +94,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 //        mapView.onPause();
     }
 
+    @NonNull
     @Override
     public MapPresenter createPresenter() {
         return new MapPresenter(getActivity());
@@ -96,6 +104,12 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     public void onDestroy() {
         super.onDestroy();
 //        mapView.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     @Override
@@ -135,7 +149,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
             double latitude = users.get(i).getLatitude();
             double longitude = users.get(i).getLongitude();
 
-            Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
+            map.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
 
 
         }
@@ -159,8 +173,13 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
     }
 
+    @NonNull
     @Override
     public ViewState createViewState() {
         return new MapViewState();
+    }
+
+    @OnClick(R.id.FAB_start_reg) public void StartChildReg(){
+        getContext().startActivity(new Intent(getActivity(), RegActivityChild.class));
     }
 }

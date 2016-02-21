@@ -37,12 +37,15 @@ public class ActivityChooseLogin extends Activity {
 
 
     @OnClick(R.id.login)
-    public void login(){
+    public void login() {
         startActivity(new Intent(this, AuthActivity.class));
+        finish();
     }
     @OnClick(R.id.reg)
     public void reg(){
         startActivity(new Intent(this, RegActivity.class));
+        finish();
+
     }
 
 }

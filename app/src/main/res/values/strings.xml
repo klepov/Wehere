@@ -4,10 +4,12 @@
     <string name="google_app_id">Map</string>
 
     <string name="reg">Регистрация</string>
+    <string name="reg_child">Регистрация ребенка</string>
     <string name="login">Войти</string>
     <string name="hint_password">Пароль</string>
     <string name="hint_password_retry">Пароль еще раз</string>
     <string name="hint_login">Логин</string>
+    <string name="hint_login_child">Логин ребенка</string>
 
     <!-- code error-->
     <string name="error_1">пользователь уже существует</string>

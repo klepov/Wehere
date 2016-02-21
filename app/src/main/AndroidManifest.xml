@@ -56,6 +56,10 @@
             android:name=".maps.HandleActivity"
             android:label="@string/title_activity_handle"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".addChildren.RegActivityChild"
+            android:label="@string/title_activity_handle"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
