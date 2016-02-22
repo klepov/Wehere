@@ -43,8 +43,9 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
         regReceiver();
     }
 
-    public void getRelation(String login){
-        SendJSONToServer.sendJsonToServer(CreateJSON.listRelation("chil"));
+    public void getRelation(String token){
+
+        SendJSONToServer.sendJsonToServer(CreateJSON.listRelation(token));
 //        getView().showLoading();
     }
 

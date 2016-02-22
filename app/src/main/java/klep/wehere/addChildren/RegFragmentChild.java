@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.hkm.ui.processbutton.iml.ActionProcessButton;
@@ -46,6 +48,13 @@ public class RegFragmentChild extends BaseViewStateFragment<RegViewChild,RegPres
         super.onAttach(activity);
         authOk = (AuthOk)activity;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -130,7 +139,17 @@ public class RegFragmentChild extends BaseViewStateFragment<RegViewChild,RegPres
         vs.setStateShowError();
 
         Snackbar.make(getView(), ErrorCode.getCodeError(getActivity(),error),Snackbar.LENGTH_LONG)
+
+                .setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        super.onDismissed(snackbar, event);
+                        authOk.ok();
+                    }
+                })
                 .show();
+
+
     }
 
     @Override

@@ -5,7 +5,7 @@
 //import android.support.design.widget.TabLayout;
 //import android.support.v4.app.FragmentActivity;
 //
-//import klep.wehere.services.HandlerSocket;
+//import klep.wehere.services.HandlerSocketService;
 //
 //
 ///**
@@ -18,7 +18,7 @@
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_fragment);
 //
-//        startService(new Intent(this, HandlerSocket.class));
+//        startService(new Intent(this, HandlerSocketService.class));
 ////        MapFragment.newInstance();
 //
 ////        Websocket.start();

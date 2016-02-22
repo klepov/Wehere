@@ -29,8 +29,6 @@ public class RegPresenterChild extends MvpBasePresenter<RegViewChild> {
         subscriber = new Subscriber<ErrorHandlerModel>() {
             @Override
             public void onCompleted() {
-                Log.d("asd","complite");
-
             }
 
             @Override
@@ -45,12 +43,13 @@ public class RegPresenterChild extends MvpBasePresenter<RegViewChild> {
                 }
 
                 getView().showRegError(errorHandlerModel.getData().getCode());
+
+
             }
         };
 
-        String token = Token.find(Token.class,null,null).get(0).getToken();
+        String token = Token.find(Token.class,null).get(0).getToken();
         String con = "Token "+token;
-        Log.d("token_is",con);
         authentication.registrationChild(
                 con,
                 credentials.getLogin(),

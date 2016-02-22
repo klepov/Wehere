@@ -16,9 +16,7 @@ import java.util.List;
 import klep.wehere.auth.AuthPresenter;
 import klep.wehere.model.user.User;
 import klep.wehere.model.users.Users;
-import klep.wehere.services.HandlerSocket;
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -39,6 +37,7 @@ public class SocketAdapter extends WebSocketAdapter {
     @Override
     public void onTextMessage(WebSocket websocket, String text) throws Exception {
         parserJSON(text);
+        Log.d("LOGGGGG",text);
     }
 
     private void parserJSON(String text) {

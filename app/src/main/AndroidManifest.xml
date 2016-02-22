@@ -69,7 +69,11 @@
             android:value="AIzaSyBDvuHbjYqdgDAXvdvAR_77Dv1n9PUEEdM" />
 
         <service
-            android:name=".services.HandlerSocket"
+            android:name=".services.HandlerSocketService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".services.UpdateLocationService"
             android:enabled="true"
             android:exported="true" />
 
@@ -79,8 +83,17 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".addChildren.RegActivityChild"
-            android:label="@string/title_activity_handle"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/reg_child"></activity>
+
+        <!--<receiver-->
+            <!--android:name=".AutoStart"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true" >-->
+            <!--<intent-filter android:priority="500" >-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+
     </application>
 
 </manifest>

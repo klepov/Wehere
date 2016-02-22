@@ -2,13 +2,16 @@ package klep.wehere.services;
 
 import android.Manifest;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -17,14 +20,19 @@ import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import de.greenrobot.event.EventBus;
+import klep.wehere.model.token.Token;
 import klep.wehere.socket.MessageEvent;
 import klep.wehere.socket.SocketAdapter;
 import klep.wehere.utils.Const;
+import klep.wehere.utils.CreateJSON;
+import klep.wehere.utils.SendJSONToServer;
 
-public class HandlerSocket extends Service implements GoogleApiClient.ConnectionCallbacks, com.google.android.gms.location.LocationListener {
+public class UpdateLocationService extends Service implements GoogleApiClient.ConnectionCallbacks, com.google.android.gms.location.LocationListener {
     GoogleApiClient googleApiClient;
     LocationRequest locationRequest;
     WebSocket ws;
@@ -37,19 +45,12 @@ public class HandlerSocket extends Service implements GoogleApiClient.Connection
     public void onCreate() {
 
         super.onCreate();
-        startSocket();
-        EventBus.getDefault().registerSticky(this);
 
-//        Log.d("start", "services start");
 //
-//        TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-//        IMEI = mngr.getDeviceId();
-//        device_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-//                Settings.Secure.ANDROID_ID);
-//        Log.d("ss",device_id);
-
-
-
+        TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        IMEI = mngr.getDeviceId();
+        device_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -60,26 +61,13 @@ public class HandlerSocket extends Service implements GoogleApiClient.Connection
 
         locationRequest = new LocationRequest();
 //        locationRequest.setSmallestDisplacement(10);
-        locationRequest.setInterval(100); // Update location every 1 minute
+        locationRequest.setInterval(1000); // Update location every 1 minute
 //        locationRequest.setFastestInterval(10000);
 
 
 //        getLocal();
     }
 
-    private void startSocket() {
-        new Thread(() -> {
-            try {
-                synchronized (HandlerSocket.class) {
-                    ws = new WebSocketFactory().createSocket(Const.WS_URL);
-                    ws.addListener(new SocketAdapter(getApplicationContext()));
-                    ws.connect();
-                }
-            } catch (IOException | WebSocketException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
 
 
     @Override
@@ -88,43 +76,11 @@ public class HandlerSocket extends Service implements GoogleApiClient.Connection
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public void onEvent(MessageEvent event) {
 
-        if (ws == null) {
-//            если сокет не открыт -
-//            синхранизировать потоки
-            synchronized (HandlerSocket.class) {
-                if (ws == null) {
-//                    если и там он не открыт
-//                    то открыть принудительно
-                    startSocket();
-//                  ждать пока откроется за 10 попыток
-                    int attempts = 10;
-                    while (ws == null && !(attempts == 0)) {
-                        SystemClock.sleep(100);
-                        attempts--;
-                    }
-                } else {
-                    ws.sendText(event.json);
-                }
-
-            }
-
-        } else {
-            ws.sendText(event.json);
-        }
-    }
 
     @Override
     public void onDestroy() {
-        EventBus.getDefault().unregister(this);
         googleApiClient.disconnect();
-        try {
-
-            ws.disconnect();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
         stopSelf();
     }
 
@@ -155,6 +111,16 @@ public class HandlerSocket extends Service implements GoogleApiClient.Connection
     @Override
     public void onLocationChanged(Location location) {
 
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+
+        if (Token.count(Token.class) == 0){
+            return;
+        }
+
+        String token = Token.find(Token.class,null,null).get(0).getToken();
+        JSONObject json = CreateJSON.updateLocation(token,device_id,IMEI,latitude,longitude);
+        SendJSONToServer.sendJsonToServer(json);
 
 //        EventBus.getDefault().post(new MessageEvent(""+CreateJSON.update(IMEI,device_id,latitude,longitude)));
 

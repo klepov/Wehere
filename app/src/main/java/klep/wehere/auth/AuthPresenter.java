@@ -61,7 +61,7 @@ public class AuthPresenter extends MvpBasePresenter<AuthView> {
             @Override
             public void onNext(Token token) {
                 super.onNext(token);
-                getView().authSuccessful();
+                SendJSONToServer.sendJsonToServer(CreateJSON.auth(token.getToken()));
             }
         };
 
@@ -79,6 +79,7 @@ public class AuthPresenter extends MvpBasePresenter<AuthView> {
             public void onReceive(Context context, Intent intent) {
                 int error = intent.getExtras().getInt(WS_AUTH);
                 if (error == SUCCESS){
+
                     getView().authSuccessful();
                 }
                 else {

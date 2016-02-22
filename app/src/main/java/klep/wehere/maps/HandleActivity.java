@@ -1,5 +1,6 @@
 package klep.wehere.maps;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,6 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import klep.wehere.R;
+import klep.wehere.model.token.Token;
+import klep.wehere.services.HandlerSocketService;
+import klep.wehere.services.UpdateLocationService;
 import klep.wehere.utils.CreateJSON;
 import klep.wehere.utils.SendJSONToServer;
 
@@ -34,6 +38,7 @@ public class HandleActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        startService(new Intent(this, UpdateLocationService.class));
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentPlace,MapFragment.newInstance()).commit();
     }

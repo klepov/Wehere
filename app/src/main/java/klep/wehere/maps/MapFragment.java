@@ -27,6 +27,7 @@ import klep.wehere.R;
 import klep.wehere.addChildren.RegActivityChild;
 import klep.wehere.common.BaseViewStateFragment;
 import klep.wehere.common.LoadingDialogFragment;
+import klep.wehere.model.token.Token;
 import klep.wehere.model.users.Data;
 import klep.wehere.registration.RegActivity;
 
@@ -85,7 +86,8 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         super.onResume();
 //        mapView.onResume();
 
-        presenter.getRelation("chil");
+        String token = Token.find(Token.class,null).get(0).getToken();
+        presenter.getRelation(token);
     }
 
     @Override
@@ -129,9 +131,10 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
 //        int size = users.getData().size();
 //
+
         for (int newUser = 0;newUser<usersList.size();newUser++){
 
-            for (int oldUser =0; oldUser < users.size();oldUser++){
+            for (int oldUser = 0; oldUser < users.size();oldUser++){
 
                 if (users.get(oldUser).getDeviceID().equals(usersList.get(newUser).getDeviceID())){
                     users.remove(oldUser);
@@ -142,14 +145,20 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         users.addAll(usersList);
 
 
-        map.clear();
+
 
         for (int i = 0; i<users.size(); i++){
 
-            double latitude = users.get(i).getLatitude();
-            double longitude = users.get(i).getLongitude();
+            try {
+                double latitude = users.get(i).getLatitude();
+                double longitude = users.get(i).getLongitude();
 
-            map.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
+                map.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
+
+            }
+            catch (NullPointerException ignored){
+
+            }
 
 
         }
