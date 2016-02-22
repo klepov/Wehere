@@ -8,6 +8,7 @@ import klep.wehere.common.ServiceRetrofit;
 import klep.wehere.model.Authentication;
 import klep.wehere.model.RegistrationCredentials;
 import klep.wehere.model.error.ErrorHandlerModel;
+import klep.wehere.model.token.Token;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -47,8 +48,11 @@ public class RegPresenterChild extends MvpBasePresenter<RegViewChild> {
             }
         };
 
-
+        String token = Token.find(Token.class,null,null).get(0).getToken();
+        String con = "Token "+token;
+        Log.d("token_is",con);
         authentication.registrationChild(
+                con,
                 credentials.getLogin(),
                 credentials.getPassword1(),
                 credentials.getPassword2())

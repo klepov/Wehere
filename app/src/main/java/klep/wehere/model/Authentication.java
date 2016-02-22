@@ -4,6 +4,7 @@ import klep.wehere.model.error.ErrorHandlerModel;
 import klep.wehere.model.token.Token;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
+import retrofit.http.Header;
 import retrofit.http.POST;
 import rx.Observable;
 
@@ -23,7 +24,8 @@ public interface Authentication {
 
     @FormUrlEncoded
     @POST("api/add/child/")
-    Observable<ErrorHandlerModel> registrationChild(@Field("name_child")String username,
+    Observable<ErrorHandlerModel> registrationChild(@Header("Authorization")String token,
+                                                    @Field("name_child")String username,
                                                     @Field("password1")String password1,
                                                     @Field("password2")String password2);
 }
