@@ -19,7 +19,7 @@ public class RegActivityChild extends BaseActivity implements RegFragmentChild.A
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerReg, new RegFragmentChild())
+                    .replace(R.id.fragmentContainerRegChild, new RegFragmentChild())
                     .commit();
         }
     }

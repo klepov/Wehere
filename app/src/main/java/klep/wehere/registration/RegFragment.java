@@ -1,5 +1,6 @@
 package klep.wehere.registration;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -36,7 +37,7 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
     @Bind(R.id.btn_Reg)
     ActionProcessButton btnReg;
 
-
+    private RegOk regOk;
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -44,6 +45,12 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
 
         btnReg.setOnClickNormalState(v -> onRegClicked());
 
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        regOk = (RegOk)activity;
     }
 
     @OnClick(R.id.btn_Reg)public void onRegClicked(){
@@ -126,12 +133,16 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
 
     @Override
     public void showRegComplete() {
-
+        regOk.reg();
     }
 
     @Override
     public void showRegLoading() {
         RegViewState vs = (RegViewState) viewState;
         vs.setStateShowRegForm();
+    }
+
+    public interface RegOk{
+        public void reg();
     }
 }

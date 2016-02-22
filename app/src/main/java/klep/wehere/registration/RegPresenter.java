@@ -1,14 +1,18 @@
 package klep.wehere.registration;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import klep.wehere.auth.AuthView;
 import klep.wehere.common.ServiceRetrofit;
+import klep.wehere.maps.HandleActivity;
 import klep.wehere.model.Authentication;
 import klep.wehere.model.RegistrationCredentials;
 import klep.wehere.model.error.ErrorHandlerModel;
+import klep.wehere.model.token.Token;
+import klep.wehere.model.token.TokenSubscribe;
 import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
@@ -19,7 +23,7 @@ import rx.schedulers.Schedulers;
  * Created by klep.io on 14.02.16.
  */
 public class RegPresenter extends MvpBasePresenter<RegView> {
-    Subscriber <ErrorHandlerModel> subscriber;
+    Subscriber <Token> subscriber;
 
     public void doReg(RegistrationCredentials credentials){
         if (isViewAttached()){
@@ -28,28 +32,22 @@ public class RegPresenter extends MvpBasePresenter<RegView> {
         final Authentication authentication = ServiceRetrofit
                 .createService(Authentication.class);
 
-        subscriber = new Subscriber<ErrorHandlerModel>() {
-            @Override
-            public void onCompleted() {
-                Log.d("asd","complite");
-
-            }
-
+        subscriber = new TokenSubscribe() {
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+
             }
 
             @Override
-            public void onNext(ErrorHandlerModel errorHandlerModel) {
-                if (errorHandlerModel.getData().getCode() == 99 && isViewAttached()){
+            public void onNext(Token token) {
+                if (token.getToken() == null){
+                    getView().showRegError(1);
+                }else {
+                    super.onNext(token);
                     getView().showRegComplete();
                 }
-
-                getView().showRegError(errorHandlerModel.getData().getCode());
             }
         };
-
 
         authentication.registration(
                 credentials.getLogin(),

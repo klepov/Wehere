@@ -158,8 +158,7 @@ public class AuthLoginFragment extends BaseViewStateFragment<AuthView,AuthPresen
 
     @Override
     public void authSuccessful() {
-        Snackbar.make(getView(),"OKAY",Snackbar.LENGTH_LONG)
-                .show();
+
         authOk.ok();
     }
 

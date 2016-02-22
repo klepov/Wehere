@@ -12,9 +12,12 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import klep.wehere.common.ServiceRetrofit;
 import klep.wehere.model.Authentication;
 import klep.wehere.model.error.ErrorHandlerModel;
+import klep.wehere.model.token.Token;
+import klep.wehere.model.token.TokenSubscribe;
 import klep.wehere.utils.CreateJSON;
 import klep.wehere.utils.ErrorCode;
 import klep.wehere.utils.SendJSONToServer;
+import retrofit.HttpException;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -30,7 +33,7 @@ public class AuthPresenter extends MvpBasePresenter<AuthView> {
     public static final int SUCCESS = 77;
     private BroadcastReceiver engineReceiver;
 
-    Subscriber<ErrorHandlerModel> subscriber;
+    Subscriber<Token> subscriber;
 
     private Context context;
 
@@ -48,27 +51,17 @@ public class AuthPresenter extends MvpBasePresenter<AuthView> {
             getView().showLoading();
         }
 
-        subscriber = new Subscriber<ErrorHandlerModel>() {
-            @Override
-            public void onCompleted() {
-            }
 
+        subscriber = new TokenSubscribe() {
             @Override
             public void onError(Throwable e) {
 
-                e.printStackTrace();
             }
 
             @Override
-            public void onNext(ErrorHandlerModel errorCode) {
-                if (errorCode.getData().getCode() == 99){
-                    // TODO: 17.02.16 сделать проверку на логин
-                    SendJSONToServer.sendJsonToServer
-                            (CreateJSON.auth(login));
-//                    getView().authSuccessful();
-                }
-
-                getView().showError(errorCode.getData().getCode());
+            public void onNext(Token token) {
+                super.onNext(token);
+                getView().authSuccessful();
             }
         };
 
