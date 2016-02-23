@@ -154,9 +154,11 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
             try {
                 double latitude = users.get(i).getLatitude();
                 double longitude = users.get(i).getLongitude();
+                String name = users.get(i).getName();
 
-                Marker marker = map.addMarker(new MarkerOptions()
-                        .position(new LatLng(latitude,longitude)));
+                map.addMarker(new MarkerOptions()
+                        .position(new LatLng(latitude,longitude))
+                .title(name)).showInfoWindow();
 
 
             }
