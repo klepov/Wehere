@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     public void onResume() {
         super.onResume();
 //        mapView.onResume();
-
+        Log.d("onResume","onResume");
         String token = Token.find(Token.class,null).get(0).getToken();
         presenter.getRelation(token);
     }
@@ -146,6 +147,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
 
 
+        map.clear();
 
         for (int i = 0; i<users.size(); i++){
 
@@ -153,7 +155,9 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
                 double latitude = users.get(i).getLatitude();
                 double longitude = users.get(i).getLongitude();
 
-                map.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
+                Marker marker = map.addMarker(new MarkerOptions()
+                        .position(new LatLng(latitude,longitude)));
+
 
             }
             catch (NullPointerException ignored){

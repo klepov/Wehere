@@ -34,6 +34,8 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
     EditText password1Edit;
     @Bind(R.id.password2)
     EditText password2Edit;
+    @Bind(R.id.nameReg)
+    EditText nameRegEdit;
     @Bind(R.id.btn_Reg)
     ActionProcessButton btnReg;
 
@@ -48,6 +50,12 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
     }
 
     @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_reg;
+    }
+
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         regOk = (RegOk)activity;
@@ -57,6 +65,7 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
         String login = loginEdit.getText().toString();
         String password1 = password1Edit.getText().toString();
         String password2 = password2Edit.getText().toString();
+        String nameReg = nameRegEdit.getText().toString();
 
         if (TextUtils.isEmpty(login)){
             loginEdit.clearAnimation();
@@ -70,10 +79,18 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
             password1Edit.startAnimation(shake);
             return;
         }
+
         else if (TextUtils.isEmpty(password2)){
             password2Edit.clearAnimation();
             Animation shake = AnimationUtils.loadAnimation(getActivity(),R.anim.shake);
             password2Edit.startAnimation(shake);
+            return;
+        }
+
+        else if (TextUtils.isEmpty(nameReg)){
+            nameRegEdit.clearAnimation();
+            Animation shake = AnimationUtils.loadAnimation(getActivity(),R.anim.shake);
+            nameRegEdit.startAnimation(shake);
             return;
         }
 
@@ -82,15 +99,11 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
             return;
         }
 
-        presenter.doReg(new RegistrationCredentials(login,password1,password2));
+        presenter.doReg(new RegistrationCredentials(login,password1,password2,nameReg));
 
     }
 
 
-    @Override
-    protected int getLayoutRes() {
-        return R.layout.fragment_reg;
-    }
 
     @Override
     public ViewState createViewState() {

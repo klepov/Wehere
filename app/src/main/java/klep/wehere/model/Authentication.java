@@ -19,13 +19,15 @@ public interface Authentication {
     @FormUrlEncoded
     @POST("api/signup/")
     Observable<Token> registration(@Field("username")String username,
-                                        @Field("password1")String password1,
-                                               @Field("password2")String password2);
+                                   @Field("password1")String password1,
+                                   @Field("password2")String password2,
+                                   @Field("name") String name);
 
     @FormUrlEncoded
     @POST("api/add/child/")
     Observable<ErrorHandlerModel> registrationChild(@Header("Authorization")String token,
-                                                    @Field("name_child")String username,
+                                                    @Field("login_child")String username,
                                                     @Field("password1")String password1,
-                                                    @Field("password2")String password2);
+                                                    @Field("password2")String password2,
+                                                    @Field("name_child")String name);
 }

@@ -33,6 +33,8 @@ public class RegFragmentChild extends BaseViewStateFragment<RegViewChild,RegPres
     EditText password1Edit;
     @Bind(R.id.password2Child)
     EditText password2Edit;
+    @Bind(R.id.nameChild)
+    EditText nameRegEdit;
     @Bind(R.id.btn_Reg_child)
     ActionProcessButton btnReg;
 
@@ -68,6 +70,7 @@ public class RegFragmentChild extends BaseViewStateFragment<RegViewChild,RegPres
         String login = loginEdit.getText().toString();
         String password1 = password1Edit.getText().toString();
         String password2 = password2Edit.getText().toString();
+        String nameReg = nameRegEdit.getText().toString();
 
         if (TextUtils.isEmpty(login)){
             loginEdit.clearAnimation();
@@ -88,12 +91,19 @@ public class RegFragmentChild extends BaseViewStateFragment<RegViewChild,RegPres
             return;
         }
 
+        else if (TextUtils.isEmpty(nameReg)){
+            nameRegEdit.clearAnimation();
+            Animation shake = AnimationUtils.loadAnimation(getActivity(),R.anim.shake);
+            nameRegEdit.startAnimation(shake);
+            return;
+        }
+
         else if (!password1.equals(password2)){
             showRegError(3);
             return;
         }
 
-        presenter.doReg(new RegistrationCredentials(login,password1,password2));
+        presenter.doReg(new RegistrationCredentials(login,password1,password2,nameReg));
 
     }
 

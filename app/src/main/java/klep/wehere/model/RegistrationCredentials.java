@@ -4,15 +4,25 @@ package klep.wehere.model;
  * Created by klep.io on 14.02.16.
  */
 public class RegistrationCredentials {
-    String login,password1,password2;
+    private String login,password1,password2,name;
 
-    public RegistrationCredentials(String login, String password1, String password2) {
+
+    public RegistrationCredentials(String login, String password1, String password2, String name) {
         this.login = login;
         this.password1 = password1;
         this.password2 = password2;
+        this.name = name;
     }
 
 
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
     public String getLogin() {
         return login;
     }

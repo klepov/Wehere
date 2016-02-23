@@ -39,6 +39,7 @@ public class HandleActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         startService(new Intent(this, UpdateLocationService.class));
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentPlace,MapFragment.newInstance()).commit();
     }

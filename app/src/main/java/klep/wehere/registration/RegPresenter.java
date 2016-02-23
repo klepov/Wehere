@@ -22,6 +22,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by klep.io on 14.02.16.
  */
+
 public class RegPresenter extends MvpBasePresenter<RegView> {
     Subscriber <Token> subscriber;
 
@@ -52,7 +53,8 @@ public class RegPresenter extends MvpBasePresenter<RegView> {
         authentication.registration(
                 credentials.getLogin(),
                 credentials.getPassword1(),
-                credentials.getPassword2())
+                credentials.getPassword2(),
+                credentials.getName())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);

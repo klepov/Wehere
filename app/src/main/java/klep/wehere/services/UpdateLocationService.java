@@ -12,6 +12,8 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -117,9 +119,9 @@ public class UpdateLocationService extends Service implements GoogleApiClient.Co
         if (Token.count(Token.class) == 0){
             return;
         }
-
-        String token = Token.find(Token.class,null,null).get(0).getToken();
-        JSONObject json = CreateJSON.updateLocation(token,device_id,IMEI,latitude,longitude);
+        String token = Token.find(Token.class,null).get(0).getToken();
+        JSONObject json = CreateJSON.
+                updateLocation(token, device_id,IMEI,latitude,longitude);
         SendJSONToServer.sendJsonToServer(json);
 
 //        EventBus.getDefault().post(new MessageEvent(""+CreateJSON.update(IMEI,device_id,latitude,longitude)));

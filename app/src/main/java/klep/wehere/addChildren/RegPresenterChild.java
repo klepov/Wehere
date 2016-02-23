@@ -54,7 +54,8 @@ public class RegPresenterChild extends MvpBasePresenter<RegViewChild> {
                 con,
                 credentials.getLogin(),
                 credentials.getPassword1(),
-                credentials.getPassword2())
+                credentials.getPassword2(),
+                credentials.getName())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
