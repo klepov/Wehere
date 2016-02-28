@@ -1,58 +1,48 @@
-package klep.wehere.addChildren;
-
-import android.util.Log;
-
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+package klep.wehere.registration;
 
 import klep.wehere.common.RegPresenter;
 import klep.wehere.common.ServiceRetrofit;
 import klep.wehere.model.Authentication;
 import klep.wehere.model.RegistrationCredentials;
-import klep.wehere.model.error.ErrorHandlerModel;
 import klep.wehere.model.token.Token;
+import klep.wehere.model.token.TokenSubscribe;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by klep.io on 14.02.16.
+ * Created by klep.io on 28.02.16.
  */
-public class RegPresenterChild extends RegPresenter {
-    Subscriber <ErrorHandlerModel> subscriber;
+public class RegParentPresenter extends RegPresenter {
+    Subscriber<Token> subscriber;
 
-    public void doReg(RegistrationCredentials credentials){
+
+    @Override
+    public void doReg(RegistrationCredentials credentials) {
         if (isViewAttached()){
             getView().showRegLoading();
         }
         final Authentication authentication = ServiceRetrofit
                 .createService(Authentication.class);
 
-        subscriber = new Subscriber<ErrorHandlerModel>() {
-            @Override
-            public void onCompleted() {
-            }
-
+        subscriber = new TokenSubscribe() {
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+
             }
 
             @Override
-            public void onNext(ErrorHandlerModel errorHandlerModel) {
-                if (errorHandlerModel.getData().getCode() == 99 && isViewAttached()){
+            public void onNext(Token token) {
+                if (token.getToken() == null){
+                    getView().showRegError(1);
+                }else {
+                    super.onNext(token);
                     getView().showRegComplete();
                 }
-
-                getView().showRegError(errorHandlerModel.getData().getCode());
-
-
             }
         };
 
-        String token = Token.find(Token.class,null).get(0).getToken();
-        String con = "Token "+token;
-        authentication.registrationChild(
-                con,
+        authentication.registration(
                 credentials.getLogin(),
                 credentials.getPassword1(),
                 credentials.getPassword2(),
@@ -61,7 +51,6 @@ public class RegPresenterChild extends RegPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+
     }
-
-
 }

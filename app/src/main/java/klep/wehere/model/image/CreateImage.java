@@ -10,8 +10,13 @@ import java.io.File;
  */
 public class CreateImage {
     public static RequestBody makeImage(String path){
-        File file = new File(path);
+        try {
+            File file = new File(path);
 
-        return RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            return RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 }

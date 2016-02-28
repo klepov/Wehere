@@ -55,7 +55,7 @@ public class AuthPresenter extends MvpBasePresenter<AuthView> {
         subscriber = new TokenSubscribe() {
             @Override
             public void onError(Throwable e) {
-
+                e.printStackTrace();
             }
 
             @Override

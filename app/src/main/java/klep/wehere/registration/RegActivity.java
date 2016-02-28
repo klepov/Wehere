@@ -2,15 +2,10 @@ package klep.wehere.registration;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-
-import com.sangcomz.fishbun.define.Define;
-
-import java.util.ArrayList;
 
 import klep.wehere.R;
-import klep.wehere.auth.AuthLoginFragment;
 import klep.wehere.common.BaseActivity;
+import klep.wehere.common.RegFragment;
 import klep.wehere.maps.HandleActivity;
 
 /**
@@ -25,7 +20,7 @@ public class RegActivity extends BaseActivity implements RegFragment.RegOk{
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerReg, new RegFragment())
+                    .replace(R.id.fragmentContainerReg, new RegParentFragment())
                     .commit();
         }
     }

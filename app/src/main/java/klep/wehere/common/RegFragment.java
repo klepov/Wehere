@@ -1,38 +1,29 @@
-package klep.wehere.registration;
+package klep.wehere.common;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.hkm.ui.processbutton.iml.ActionProcessButton;
 import com.sangcomz.fishbun.FishBun;
 import com.sangcomz.fishbun.define.Define;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.RequestBody;
 
 
-import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import klep.wehere.R;
-import klep.wehere.common.BaseViewStateFragment;
 import klep.wehere.model.RegistrationCredentials;
 import klep.wehere.model.image.CreateImage;
 import klep.wehere.utils.ErrorCode;
@@ -41,7 +32,7 @@ import klep.wehere.utils.ErrorCode;
 /**
  * Created by klep.io on 14.02.16.
  */
-public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> implements RegView {
+public abstract class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> implements RegView {
 
     @Bind(R.id.loginReg)
     EditText loginEdit;
@@ -59,7 +50,7 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
 
 
 
-    private RegOk regOk;
+    public RegOk regOk;
     String path;
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -128,7 +119,11 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
         }
 
 
-        presenter.doReg(new RegistrationCredentials(login,password1,password2,nameReg,CreateImage.makeImage(path)));
+        presenter.doReg(new RegistrationCredentials(login,
+                password1,
+                password2,
+                nameReg,
+                CreateImage.makeImage(path)));
 
     }
 
@@ -157,9 +152,9 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
 
 
     @Override
-    public ViewState createViewState() {
+    public  ViewState createViewState(){
         return new RegViewState();
-    }
+    };
 
     @Override
     public void onNewViewStateInstance() {
@@ -167,9 +162,7 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
     }
 
     @Override
-    public RegPresenter createPresenter() {
-        return new RegPresenter();
-    }
+    public abstract RegPresenter createPresenter();
 
     @Override
     public void showRegForm() {
@@ -196,15 +189,12 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
     }
 
     @Override
-    public void showRegComplete() {
+    public void showRegComplete(){
         regOk.reg();
     }
 
     @Override
-    public void showRegLoading() {
-        RegViewState vs = (RegViewState) viewState;
-        vs.setStateShowRegForm();
-    }
+    public void showRegLoading(){};
 
     @Override
     public void showImage(Bitmap bitmap) {

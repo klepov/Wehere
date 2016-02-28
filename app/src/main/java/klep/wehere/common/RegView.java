@@ -1,4 +1,4 @@
-package klep.wehere.registration;
+package klep.wehere.common;
 
 import android.graphics.Bitmap;
 

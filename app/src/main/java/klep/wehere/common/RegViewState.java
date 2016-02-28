@@ -1,11 +1,13 @@
-package klep.wehere.addChildren;
+package klep.wehere.common;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
+
+import klep.wehere.common.RegView;
 
 /**
  * Created by klep.io on 14.02.16.
  */
-public class RegViewStateChild implements ViewState<RegViewChild>{
+public class RegViewState implements ViewState<RegView>{
     final int STATE_SHOW_REG_FORM = 0;
     final int STATE_SHOW_LOADING= 1;
     final int STATE_SHOW_ERROR= 2;
@@ -13,7 +15,7 @@ public class RegViewStateChild implements ViewState<RegViewChild>{
     int state = STATE_SHOW_REG_FORM;
 
     @Override
-    public void apply(RegViewChild view, boolean retained) {
+    public void apply(RegView view, boolean retained) {
         switch (state){
             case STATE_SHOW_LOADING:
                 view.showRegLoading();

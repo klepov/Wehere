@@ -2,17 +2,16 @@ package klep.wehere.addChildren;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.Toolbar;
 
 import klep.wehere.R;
 import klep.wehere.common.BaseActivity;
+import klep.wehere.common.RegFragment;
 import klep.wehere.maps.HandleActivity;
 
 /**
  * Created by klep.io on 14.02.16.
  */
-public class RegActivityChild extends BaseActivity implements RegFragmentChild.AuthOk {
+public class RegActivityChild extends BaseActivity implements RegFragment.RegOk {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,20 +20,15 @@ public class RegActivityChild extends BaseActivity implements RegFragmentChild.A
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerRegChild, new RegFragmentChild())
+                    .replace(R.id.fragmentContainerRegChild, new RegChildFragment())
                     .commit();
         }
 
-
-
     }
 
-
     @Override
-    public void ok() {
+    public void reg() {
         startActivity(new Intent(this, HandleActivity.class));
         finish();
     }
-
-
 }

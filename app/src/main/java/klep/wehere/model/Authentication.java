@@ -27,14 +27,14 @@ public interface Authentication {
                                    @Part("password1")String password1,
                                    @Part("password2")String password2,
                                    @Part("name") String name,
-                                   @Part("image\"; filename=\"image.png\" ")RequestBody photo)
-            ;
+                                   @Part("image\"; filename=\"image.png\" ")RequestBody photo);
 
-    @FormUrlEncoded
+    @Multipart
     @POST("api/add/child/")
     Observable<ErrorHandlerModel> registrationChild(@Header("Authorization")String token,
-                                                    @Field("login_child")String username,
-                                                    @Field("password1")String password1,
-                                                    @Field("password2")String password2,
-                                                    @Field("name_child")String name);
+                                                    @Part("login_child")String username,
+                                                    @Part("password1")String password1,
+                                                    @Part("password2")String password2,
+                                                    @Part("name_child")String name,
+                                                    @Part("image\"; filename=\"image.png\" ")RequestBody photo);
 }
