@@ -1,27 +1,42 @@
 package klep.wehere.registration;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.hkm.ui.processbutton.iml.ActionProcessButton;
+import com.sangcomz.fishbun.FishBun;
+import com.sangcomz.fishbun.define.Define;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.RequestBody;
+
+
+import java.io.File;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import klep.wehere.R;
-import klep.wehere.auth.AuthViewSate;
 import klep.wehere.common.BaseViewStateFragment;
 import klep.wehere.model.RegistrationCredentials;
+import klep.wehere.model.image.CreateImage;
 import klep.wehere.utils.ErrorCode;
+
 
 /**
  * Created by klep.io on 14.02.16.
@@ -38,8 +53,14 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
     EditText nameRegEdit;
     @Bind(R.id.btn_Reg)
     ActionProcessButton btnReg;
+    @Bind(R.id.btn_photo_parent)
+    CircleImageView photoParentButton;
+
+
+
 
     private RegOk regOk;
+    String path;
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -47,7 +68,14 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
 
         btnReg.setOnClickNormalState(v -> onRegClicked());
 
+        if (savedInstanceState != null){
+            path = savedInstanceState.getString("path");
+            presenter.resizeImage(path);
+        }
+
     }
+
+
 
     @Override
     protected int getLayoutRes() {
@@ -99,7 +127,30 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
             return;
         }
 
-        presenter.doReg(new RegistrationCredentials(login,password1,password2,nameReg));
+
+        presenter.doReg(new RegistrationCredentials(login,password1,password2,nameReg,CreateImage.makeImage(path)));
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (path != null) outState.putString("path",path);
+    }
+
+    @OnClick(R.id.btn_photo_parent)public void ChangePhoto(){
+        FishBun.with(RegFragment.this)
+                .setAlbumThumnaliSize(150)//you can resize album thumnail size
+                .setPickerCount(1)//you can restrict photo count
+                .setPickerSpanCount(5)
+                .setCamera(true)//you can use camera
+                .startAlbum();
 
     }
 
@@ -155,7 +206,31 @@ public class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> imp
         vs.setStateShowRegForm();
     }
 
+    @Override
+    public void showImage(Bitmap bitmap) {
+        photoParentButton.setImageBitmap(bitmap);
+    }
+
     public interface RegOk{
-        public void reg();
+        void reg();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case Define.ALBUM_REQUEST_CODE:
+                try {
+                    ArrayList<String> pathFromResult = data.
+                            getStringArrayListExtra(Define.INTENT_PATH);
+                    path = pathFromResult.get(0);
+                    presenter.resizeImage(path);
+
+                }catch (NullPointerException ignored){
+
+                }
+
+                break;
+        }
     }
 }

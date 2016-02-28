@@ -40,14 +40,6 @@ public class HandlerSocketService extends Service implements GoogleApiClient.Con
         startSocket();
         EventBus.getDefault().registerSticky(this);
 
-//        Log.d("start", "services start");
-//
-//        TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-//        IMEI = mngr.getDeviceId();
-//        device_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-//                Settings.Secure.ANDROID_ID);
-//        Log.d("ss",device_id);
-
 
 
         googleApiClient = new GoogleApiClient.Builder(this)

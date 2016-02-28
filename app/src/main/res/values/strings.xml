@@ -6,10 +6,10 @@
     <string name="reg">Регистрация</string>
     <string name="reg_child">Регистрация ребенка</string>
     <string name="login">Войти</string>
-    <string name="hint_password">Пароль</string>
-    <string name="hint_password_retry">Пароль еще раз</string>
-    <string name="hint_login">Логин</string>
-    <string name="hint_login_child">Логин ребенка</string>
+    <string name="hint_password">Введите пароль</string>
+    <string name="hint_password_retry">Введите пароль еще раз</string>
+    <string name="hint_login">Введите логин</string>
+    <string name="hint_login_child">Введите логин</string>
 
     <!-- code error-->
     <string name="error_1">пользователь уже существует</string>
@@ -27,7 +27,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_handle">HandleActivity</string>
     <string name="error_7">эта функция доступна только родителю</string>
-    <string name="get_name">как вас зовут?</string>
+    <string name="get_name">Введите имя</string>
 
 
 </resources>

@@ -1,17 +1,21 @@
 package klep.wehere.model;
 
+import com.squareup.okhttp.RequestBody;
+
 /**
  * Created by klep.io on 14.02.16.
  */
 public class RegistrationCredentials {
     private String login,password1,password2,name;
+    private RequestBody requestBody;
 
 
-    public RegistrationCredentials(String login, String password1, String password2, String name) {
+    public RegistrationCredentials(String login, String password1, String password2, String name,RequestBody requestBody) {
         this.login = login;
         this.password1 = password1;
         this.password2 = password2;
         this.name = name;
+        this.requestBody = requestBody;
     }
 
 
@@ -45,5 +49,13 @@ public class RegistrationCredentials {
 
     public void setPassword2(String password2) {
         this.password2 = password2;
+    }
+
+    public RequestBody getRequestBody() {
+        return requestBody;
+    }
+
+    public void setRequestBody(RequestBody requestBody) {
+        this.requestBody = requestBody;
     }
 }

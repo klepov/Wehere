@@ -103,7 +103,7 @@ public class RegFragmentChild extends BaseViewStateFragment<RegViewChild,RegPres
             return;
         }
 
-        presenter.doReg(new RegistrationCredentials(login,password1,password2,nameReg));
+//        presenter.doReg(new RegistrationCredentials(login,password1,password2,nameReg));
 
     }
 

@@ -2,6 +2,11 @@ package klep.wehere.registration;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
+import com.sangcomz.fishbun.define.Define;
+
+import java.util.ArrayList;
 
 import klep.wehere.R;
 import klep.wehere.auth.AuthLoginFragment;
@@ -31,4 +36,6 @@ public class RegActivity extends BaseActivity implements RegFragment.RegOk{
         startActivity(new Intent(this, HandleActivity.class));
         finish();
     }
+
+
 }
