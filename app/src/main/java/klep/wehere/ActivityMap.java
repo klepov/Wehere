@@ -5,7 +5,7 @@
 //import android.support.design.widget.TabLayout;
 //import android.support.v4.app.FragmentActivity;
 //
-//import klep.wehere.services.HandlerSocket;
+//import klep.wehere.services.HandlerSocketService;
 //
 //
 ///**
@@ -18,13 +18,13 @@
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_fragment);
 //
-//        startService(new Intent(this, HandlerSocket.class));
-////        FragmentMap.newInstance();
+//        startService(new Intent(this, HandlerSocketService.class));
+////        MapFragment.newInstance();
 //
 ////        Websocket.start();
 ////        FragmentManager manager = getFragmentManager();
 ////        manager.beginTransaction()
-////                .add(R.id.place,new FragmentMap())
+////                .add(R.id.place,new MapFragment())
 ////        .commit();
 //    }
 //}

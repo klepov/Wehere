@@ -1,5 +1,7 @@
 package klep.wehere.registration;
 
+import android.graphics.Bitmap;
+
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
 /**
@@ -7,8 +9,9 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
  */
 public interface RegView extends MvpView {
 
-    public void showRegForm();
-    public void showRegError(int error);
-    public void showRegComplete();
-    public void showRegLoading();
+    void showRegForm();
+    void showRegError(int error);
+    void showRegComplete();
+    void showRegLoading();
+    void showImage(Bitmap bitmap);
 }

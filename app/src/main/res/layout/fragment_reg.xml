@@ -10,8 +10,36 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/btn_photo_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/ic_photo"
+            android:layout_weight="0" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Фотография"
+            android:id="@+id/textView2"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="#ffffff"
-        android:layout_margin="16dp">
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:layout_width="match_parent"
@@ -39,6 +67,14 @@
             android:id="@+id/password2"
             android:hint="@string/hint_password_retry" />
 
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:met_floatingLabel="highlight"
+            android:ems="10"
+            android:id="@+id/nameReg"
+            android:hint="@string/get_name" />
+
     </LinearLayout>
 
     <com.hkm.ui.processbutton.iml.ActionProcessButton
@@ -51,6 +87,6 @@
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginBottom="4dp"
-        android:layout_marginTop="-4dp" />
+        android:layout_marginTop="16dp" />
 
 </LinearLayout>

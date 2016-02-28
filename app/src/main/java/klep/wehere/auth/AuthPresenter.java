@@ -1,5 +1,9 @@
 package klep.wehere.auth;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 import android.view.View;
 
@@ -8,7 +12,12 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import klep.wehere.common.ServiceRetrofit;
 import klep.wehere.model.Authentication;
 import klep.wehere.model.error.ErrorHandlerModel;
+import klep.wehere.model.token.Token;
+import klep.wehere.model.token.TokenSubscribe;
+import klep.wehere.utils.CreateJSON;
 import klep.wehere.utils.ErrorCode;
+import klep.wehere.utils.SendJSONToServer;
+import retrofit.HttpException;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -19,7 +28,18 @@ import rx.schedulers.Schedulers;
  */
 public class AuthPresenter extends MvpBasePresenter<AuthView> {
 
-    Subscriber<ErrorHandlerModel> subscriber;
+    public static final String WS_AUTH = "WS_AUTH";
+    public static final String EngineReceiver = "EnginePresenterReceiver";
+    public static final int SUCCESS = 77;
+    private BroadcastReceiver engineReceiver;
+
+    Subscriber<Token> subscriber;
+
+    private Context context;
+
+    public AuthPresenter(Context context) {
+        this.context = context;
+    }
 
     public void doLogin(String login, String password) {
 
@@ -31,24 +51,17 @@ public class AuthPresenter extends MvpBasePresenter<AuthView> {
             getView().showLoading();
         }
 
-        subscriber = new Subscriber<ErrorHandlerModel>() {
-            @Override
-            public void onCompleted() {
-            }
 
+        subscriber = new TokenSubscribe() {
             @Override
             public void onError(Throwable e) {
 
-                e.printStackTrace();
             }
 
             @Override
-            public void onNext(ErrorHandlerModel errorCode) {
-                if (errorCode.getData().getCode() == 99){
-                    getView().authSuccessful();
-                }
-
-                getView().showError(errorCode.getData().getCode());
+            public void onNext(Token token) {
+                super.onNext(token);
+                SendJSONToServer.sendJsonToServer(CreateJSON.auth(token.getToken()));
             }
         };
 
@@ -57,6 +70,30 @@ public class AuthPresenter extends MvpBasePresenter<AuthView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+
+
+
+    public void startReceiver() {
+        engineReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int error = intent.getExtras().getInt(WS_AUTH);
+                if (error == SUCCESS){
+
+                    getView().authSuccessful();
+                }
+                else {
+                    getView().showError(error);
+                }
+
+            }
+        };
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(EngineReceiver);
+        context.registerReceiver(engineReceiver,intentFilter);
+    }
+
 
     private void cancelSubscribe(){
         if (subscriber != null && !subscriber.isUnsubscribed()){
@@ -69,11 +106,13 @@ public class AuthPresenter extends MvpBasePresenter<AuthView> {
         super.detachView(retainInstance);
         if (!retainInstance){
             cancelSubscribe();
+            context.unregisterReceiver(engineReceiver);
         }
     }
 
     @Override
     public void attachView(AuthView view) {
         super.attachView(view);
+        startReceiver();
     }
 }

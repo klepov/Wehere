@@ -1,14 +1,12 @@
 package klep.wehere.auth;
 
 import android.animation.LayoutTransition;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.text.Layout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -16,12 +14,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.hkm.ui.processbutton.iml.ActionProcessButton;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import klep.wehere.R;
 import klep.wehere.common.BaseViewStateFragment;
@@ -49,6 +45,13 @@ public class AuthLoginFragment extends BaseViewStateFragment<AuthView,AuthPresen
     ViewGroup authForm;
 
 
+    private AuthOk authOk;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        authOk = (AuthOk)activity;
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -79,7 +82,7 @@ public class AuthLoginFragment extends BaseViewStateFragment<AuthView,AuthPresen
     @NonNull
     @Override
     public AuthPresenter createPresenter() {
-        return new AuthPresenter();
+        return new AuthPresenter(getActivity());
     }
 
     @OnClick (R.id.btn_auth) public void onAuthClicked(){
@@ -137,11 +140,7 @@ public class AuthLoginFragment extends BaseViewStateFragment<AuthView,AuthPresen
         authButton.setProgress(0);
     }
 
-    private void setFormEnabled(boolean enabled){
-        authLogin.setEnabled(enabled);
-        authPassword.setEnabled(enabled);
-        authButton.setEnabled(enabled);
-    }
+
 
     @Override
     public void showError(int error) {
@@ -159,8 +158,17 @@ public class AuthLoginFragment extends BaseViewStateFragment<AuthView,AuthPresen
 
     @Override
     public void authSuccessful() {
-        Snackbar.make(getView(),"OKAY",Snackbar.LENGTH_LONG)
-                .show();
+
+        authOk.ok();
+    }
+
+    public interface AuthOk{
+        void ok();
+    }
+    private void setFormEnabled(boolean enabled){
+        authLogin.setEnabled(enabled);
+        authPassword.setEnabled(enabled);
+        authButton.setEnabled(enabled);
     }
 
 }

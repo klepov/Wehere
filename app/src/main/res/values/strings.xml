@@ -4,10 +4,12 @@
     <string name="google_app_id">Map</string>
 
     <string name="reg">Регистрация</string>
+    <string name="reg_child">Регистрация ребенка</string>
     <string name="login">Войти</string>
-    <string name="hint_password">Пароль</string>
-    <string name="hint_password_retry">Пароль еще раз</string>
-    <string name="hint_login">Логин</string>
+    <string name="hint_password">Введите пароль</string>
+    <string name="hint_password_retry">Введите пароль еще раз</string>
+    <string name="hint_login">Введите логин</string>
+    <string name="hint_login_child">Введите логин</string>
 
     <!-- code error-->
     <string name="error_1">пользователь уже существует</string>
@@ -17,6 +19,15 @@
     <string name="error_5">Пользователь не существует</string>
     <string name="error_6">Войдите в аккаунт</string>
     <string name="error_0">неизвестная ошибка</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_handle">HandleActivity</string>
+    <string name="error_7">эта функция доступна только родителю</string>
+    <string name="get_name">Введите имя</string>
 
 
 </resources>

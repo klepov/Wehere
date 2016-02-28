@@ -1,29 +1,34 @@
-package klep.wehere.engine;
+package klep.wehere.addChildren;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
-
-import klep.wehere.auth.AuthView;
 
 /**
  * Created by klep.io on 14.02.16.
  */
-public class EngineViewState implements ViewState<EngineView> {
-
+public class RegViewStateChild implements ViewState<RegViewChild>{
+    final int STATE_SHOW_REG_FORM = 0;
     final int STATE_SHOW_LOADING= 1;
     final int STATE_SHOW_ERROR= 2;
 
-    int state = STATE_SHOW_LOADING;
+    int state = STATE_SHOW_REG_FORM;
 
     @Override
-    public void apply(EngineView view, boolean retained) {
+    public void apply(RegViewChild view, boolean retained) {
         switch (state){
             case STATE_SHOW_LOADING:
-                view.showLoading();
+                view.showRegLoading();
+                break;
+            case STATE_SHOW_REG_FORM:
+                view.showRegForm();
                 break;
             case STATE_SHOW_ERROR:
-                view.showError(0);
+                view.showRegError(0);
                 break;
         }
+    }
+
+    public void setStateShowRegForm(){
+        state = STATE_SHOW_REG_FORM;
     }
 
     public void setShowLoading(){
@@ -32,5 +37,4 @@ public class EngineViewState implements ViewState<EngineView> {
     public void setStateShowError(){
         state = STATE_SHOW_ERROR;
     }
-
 }

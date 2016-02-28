@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="klep.wehere" >
+    package="klep.wehere">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -9,11 +9,10 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
-
     <permission
         android:name="com.packagename.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.packagename.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -22,42 +21,75 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
+
+        android:name="com.orm.SugarApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="DATABASE"
+            android:value="wehere.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="klep.wehere.model" />
         <activity
-            android:name=".engine.EngineActivity"
-            android:label="@string/app_name" >
+            android:name=".chooseLogin.ActivityChooseLogin"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".auth.AuthActivity"
-            android:label="@string/app_name" >
-        </activity>
-
+            android:label="@string/app_name" />
         <activity
             android:name=".registration.RegActivity"
-            android:label="@string/app_name" >
-        </activity>
-
+            android:label="@string/app_name" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBDvuHbjYqdgDAXvdvAR_77Dv1n9PUEEdM" />
 
         <service
-            android:name=".services.HandlerSocket"
+            android:name=".services.HandlerSocketService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".services.UpdateLocationService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".maps.HandleActivity"
+            android:label="@string/title_activity_handle"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".addChildren.RegActivityChild"
+            android:label="@string/reg_child"></activity>
+
+        <!--<receiver-->
+            <!--android:name=".AutoStart"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true" >-->
+            <!--<intent-filter android:priority="500" >-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+
     </application>
 
 </manifest>
