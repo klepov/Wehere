@@ -1,24 +1,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/fragment_image_roulette"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <fragment
-        android:id="@+id/map1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="3dp"
-        android:layout_weight="2"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
-    <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:id="@+id/FAB_start_reg"/>
+        android:layout_height="wrap_content">
+
+        <fragment
+            android:id="@+id/map1"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="3dp"
+             />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/FAB_start_reg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp" />
     </FrameLayout>
 
 </LinearLayout>
+

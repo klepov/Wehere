@@ -10,4 +10,5 @@ import java.util.Map;
 public class Const {
     public static String WS_URL = "ws://176.56.50.175:8000/core/socket/new/";
     public static String HTTP_URL = "http://176.56.50.175:8080/core/";
+    public static String IMAGE_URL = "http://176.56.50.175:8080/image_user/";
 }

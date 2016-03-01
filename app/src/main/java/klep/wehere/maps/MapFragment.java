@@ -66,6 +66,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
 
+
         setUpMapIfNeeded();
         users = new ArrayList<>();
         ButterKnife.bind(this,view);
