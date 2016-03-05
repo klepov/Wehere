@@ -213,10 +213,6 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
             CircleImageView imageView = new CircleImageView(getActivity());
 
-            if (nameNeedFound != null){
-                setColorImage(imageView);
-            }
-
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(60, 60);
             layoutParams.gravity = Gravity.CENTER;
             layoutParams.setMargins(10, 8, 10, 8);
@@ -231,15 +227,14 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 //
                     v -> {
                         findUser(users.get(finalI).getUser());
-                        setColorImage(imageView);
                     }
             );
         }
     }
 
-    private void setColorImage(CircleImageView imageView) {
-        imageView.setBorderColor(getResources().getColor(R.color.colorPrimaryDark));
-        imageView.setBorderWidth(2);
+    private void setColorImage(int position,int border) {
+        ((CircleImageView)scrollView.getChildAt(position)).setBorderColor(getResources().getColor(R.color.colorPrimaryDark));
+        ((CircleImageView)scrollView.getChildAt(position)).setBorderWidth(border);
     }
 
     private void showPersonAlways() {
@@ -249,15 +244,13 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
                     .zoom(ZOOM_FOR_USER)
                     .build();
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
         }else {
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(49,22))
                     .build();
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-            for (int i= 0; i < scrollView.getChildCount(); i ++){
-                ((CircleImageView)scrollView.getChildAt(i)).setBorderWidth(0);
-            }
         }
     }
 
@@ -267,17 +260,21 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
             if (users.get(i).getUser().equals(name)) {
                 Data userFound = users.get(i);
                 nameNeedFound = userFound.getUser();
-                createLatLng(userFound.getLatitude(),userFound.getLongitude());
+                setColorImage(i,2);
+                createLatLng(userFound.getLatitude(),userFound.getLongitude(),i);
+            }else {
+                ((CircleImageView)scrollView.getChildAt(i)).setBorderWidth(0);
             }
         }
     }
 
-    private void createLatLng(Double latitude, Double longitude) {
+    private void createLatLng(Double latitude, Double longitude,int position) {
         LatLng oldFilter = filter;
         filter = new LatLng(latitude,longitude);
         if (oldFilter != null && oldFilter.equals(filter)){
             filter = null;
             nameNeedFound = null;
+            setColorImage(position,0);
         }
         showPersonAlways();
 
