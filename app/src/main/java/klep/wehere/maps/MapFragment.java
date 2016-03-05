@@ -7,16 +7,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +29,14 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import klep.wehere.R;
 import klep.wehere.addChildren.RegActivityChild;
 import klep.wehere.common.BaseViewStateFragment;
 import klep.wehere.common.LoadingDialogFragment;
 import klep.wehere.model.token.Token;
 import klep.wehere.model.users.Data;
-import klep.wehere.registration.RegActivity;
+import klep.wehere.utils.Const;
 
 /**
  * Created by klep.io on 07.01.16.
@@ -41,6 +47,10 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     private List<Data> users;
 
     private GoogleMap map;
+
+    private LatLng filter;
+
+    @Bind(R.id.map_photo_scroll)LinearLayout scrollView;
 
 
 
@@ -65,18 +75,17 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
+        ButterKnife.bind(this,view);
 
-
+        Log.d("ss", "ss");
         setUpMapIfNeeded();
         users = new ArrayList<>();
-        ButterKnife.bind(this,view);
         return view;
     }
 
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (map == null) {
-            // Try to obtain the map from the SupportMapFragment.
             map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map1))
                     .getMap();
         }
@@ -92,11 +101,6 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         presenter.getRelation(token);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-//        mapView.onPause();
-    }
 
     @NonNull
     @Override
@@ -107,7 +111,6 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        mapView.onDestroy();
     }
 
     @Override
@@ -119,7 +122,6 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-//        mapView.onLowMemory();
     }
 
 
@@ -130,9 +132,6 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
     @Override
     public void showUpdate(List<Data> usersList) {
-
-//        int size = users.getData().size();
-//
 
         for (int newUser = 0;newUser<usersList.size();newUser++){
 
@@ -146,6 +145,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
         users.addAll(usersList);
 
+        inflateImageLayout();
 
 
         map.clear();
@@ -158,8 +158,8 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
                 String name = users.get(i).getName();
 
                 map.addMarker(new MarkerOptions()
-                        .position(new LatLng(latitude,longitude))
-                .title(name)).showInfoWindow();
+                        .position(new LatLng(latitude, longitude))
+                        .title(name)).showInfoWindow();
 
 
             }
@@ -169,7 +169,11 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
 
         }
+
+        showPersonAlways();
     }
+
+
 
     @Override
     public void showMap() {
@@ -198,4 +202,56 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     @OnClick(R.id.FAB_start_reg) public void StartChildReg(){
         getContext().startActivity(new Intent(getActivity(), RegActivityChild.class));
     }
+
+    private void inflateImageLayout() {
+        for (int i = 0; i < users.size(); i++) {
+
+            CircleImageView imageView = new CircleImageView(getActivity());
+
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(60, 60);
+            layoutParams.gravity = Gravity.CENTER;
+            layoutParams.setMargins(10, 8, 10, 8);
+            imageView.setLayoutParams(layoutParams);
+            Picasso.with(getActivity())
+                    .load(Const.IMAGE_URL + users.get(i).getLinkToImage())
+                    .into(imageView);
+
+            scrollView.addView(imageView);
+            final int finalI = i;
+            imageView.setOnClickListener(
+//
+                    v -> {
+                        createLatLng(users.get(finalI).getLatitude(), users.get(finalI).getLongitude());
+                        showPersonAlways();
+                    }
+            );
+        }
+    }
+
+    private void showPersonAlways() {
+        if (filter != null) {
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(filter)
+                    .zoom(16)
+                    .build();
+            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }else {
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(0,0))
+                    .build();
+            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        }
+    }
+
+
+    private void createLatLng(Double latitude, Double longitude) {
+        LatLng oldFilter = filter;
+        filter = new LatLng(latitude,longitude);
+        if (oldFilter == filter){
+            filter = null;
+        }
+    }
+
 }

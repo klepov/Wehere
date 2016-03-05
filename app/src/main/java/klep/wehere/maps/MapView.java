@@ -1,5 +1,7 @@
 package klep.wehere.maps;
 
+import android.widget.ImageView;
+
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import java.util.ArrayList;
