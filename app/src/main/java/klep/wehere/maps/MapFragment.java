@@ -213,6 +213,9 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
             CircleImageView imageView = new CircleImageView(getActivity());
 
+            if (nameNeedFound != null){
+                setColorImage(imageView);
+            }
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(60, 60);
             layoutParams.gravity = Gravity.CENTER;
@@ -228,9 +231,15 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 //
                     v -> {
                         findUser(users.get(finalI).getUser());
+                        setColorImage(imageView);
                     }
             );
         }
+    }
+
+    private void setColorImage(CircleImageView imageView) {
+        imageView.setBorderColor(getResources().getColor(R.color.colorPrimaryDark));
+        imageView.setBorderWidth(2);
     }
 
     private void showPersonAlways() {
@@ -246,6 +255,9 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
                     .build();
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+            for (int i= 0; i < scrollView.getChildCount(); i ++){
+                ((CircleImageView)scrollView.getChildAt(i)).setBorderWidth(0);
+            }
         }
     }
 
@@ -265,6 +277,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         filter = new LatLng(latitude,longitude);
         if (oldFilter != null && oldFilter.equals(filter)){
             filter = null;
+            nameNeedFound = null;
         }
         showPersonAlways();
 
