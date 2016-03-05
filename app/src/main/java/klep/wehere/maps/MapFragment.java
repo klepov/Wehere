@@ -44,11 +44,13 @@ import klep.wehere.utils.Const;
 public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         implements MapView {
 
+    public static final int ZOOM_FOR_USER = 16;
     private List<Data> users;
 
     private GoogleMap map;
 
     private LatLng filter;
+    private String nameNeedFound;
 
     @Bind(R.id.map_photo_scroll)LinearLayout scrollView;
 
@@ -143,6 +145,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
             }
         }
 
+        scrollView.removeAllViews();
         users.addAll(usersList);
 
         inflateImageLayout();
@@ -170,7 +173,9 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
         }
 
-        showPersonAlways();
+        if (nameNeedFound != null){
+            findUser(nameNeedFound);
+        }
     }
 
 
@@ -222,8 +227,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
             imageView.setOnClickListener(
 //
                     v -> {
-                        createLatLng(users.get(finalI).getLatitude(), users.get(finalI).getLongitude());
-                        showPersonAlways();
+                        findUser(users.get(finalI).getUser());
                     }
             );
         }
@@ -233,12 +237,12 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         if (filter != null) {
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(filter)
-                    .zoom(16)
+                    .zoom(ZOOM_FOR_USER)
                     .build();
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }else {
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(0,0))
+                    .target(new LatLng(49,22))
                     .build();
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
@@ -246,12 +250,24 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     }
 
 
+    private void findUser(String name) {
+        for (int i = 0; i < users.size();i++){
+            if (users.get(i).getUser().equals(name)) {
+                Data userFound = users.get(i);
+                nameNeedFound = userFound.getUser();
+                createLatLng(userFound.getLatitude(),userFound.getLongitude());
+            }
+        }
+    }
+
     private void createLatLng(Double latitude, Double longitude) {
         LatLng oldFilter = filter;
         filter = new LatLng(latitude,longitude);
-        if (oldFilter == filter){
+        if (oldFilter != null && oldFilter.equals(filter)){
             filter = null;
         }
+        showPersonAlways();
+
     }
 
 }
