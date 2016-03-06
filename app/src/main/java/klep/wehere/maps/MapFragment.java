@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -225,15 +226,13 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
             final int finalI = i;
             imageView.setOnClickListener(
 //
-                    v -> {
-                        findUser(users.get(finalI).getUser());
-                    }
+                    v -> findUser(users.get(finalI).getUser())
             );
         }
     }
 
     private void setColorImage(int position,int border) {
-        ((CircleImageView)scrollView.getChildAt(position)).setBorderColor(getResources().getColor(R.color.colorPrimaryDark));
+        ((CircleImageView)scrollView.getChildAt(position)).setBorderColor(getResources().getColor(R.color.chosen));
         ((CircleImageView)scrollView.getChildAt(position)).setBorderWidth(border);
     }
 
@@ -260,8 +259,15 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
             if (users.get(i).getUser().equals(name)) {
                 Data userFound = users.get(i);
                 nameNeedFound = userFound.getUser();
-                setColorImage(i,2);
-                createLatLng(userFound.getLatitude(),userFound.getLongitude(),i);
+
+
+                setColorImage(i, 2);
+                try {
+                    createLatLng(userFound.getLatitude(),userFound.getLongitude(),i);
+                }catch (NullPointerException e){
+                    Snackbar.make(getView(),"За этого пользователя никто не входил",Snackbar.LENGTH_LONG).show();
+                    setColorImage(i,0);
+                }
             }else {
                 ((CircleImageView)scrollView.getChildAt(i)).setBorderWidth(0);
             }
