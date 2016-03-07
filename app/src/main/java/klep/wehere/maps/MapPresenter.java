@@ -4,9 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -14,9 +12,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import klep.wehere.model.user.User;
 import klep.wehere.model.users.Data;
@@ -70,25 +66,25 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
                     case GET_RELATIONS:
                         Users userRelation = intent.getExtras().getParcelable(ABSTRACT_USER);
                         user.addAll(userRelation.getData());
+                        getView().updateRelation(user);
                         break;
 
 
                     case GET_UPDATE_USER:
                         User updateUser = intent.getExtras().getParcelable(ABSTRACT_USER);
-                        dataUser = updateUser.getData();
-                        user.add(dataUser);
+                        getView().updateUser(updateUser.getData());
+//                        user.add(dataUser);
                         break;
 
 
                 }
 //                ArrayList <ImageView> imageViews = inflateImageData();
-                getView().showUpdate(user);
                 user.clear();
 
 
 
 //                Users u = intent.getExtras().getParcelable(GET_RELATIONS);
-//                getView().showUpdate(u);
+//                getView().updateRelation(u);
             }
         };
 

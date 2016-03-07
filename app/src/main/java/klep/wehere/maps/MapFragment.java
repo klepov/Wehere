@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -134,49 +133,105 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     }
 
     @Override
-    public void showUpdate(List<Data> usersList) {
+    public void updateRelation(List<Data> users) {
+        this.users.addAll(users);
+        putMarker();
+        putImage();
+    }
 
-        for (int newUser = 0;newUser<usersList.size();newUser++){
-
-            for (int oldUser = 0; oldUser < users.size();oldUser++){
-
-                if (users.get(oldUser).getDeviceID().equals(usersList.get(newUser).getDeviceID())){
-                    users.remove(oldUser);
-                }
-            }
-        }
-
-        scrollView.removeAllViews();
-        users.addAll(usersList);
-
-        inflateImageLayout();
-
-
+    private void putMarker() {
         map.clear();
-
         for (int i = 0; i<users.size(); i++){
-
             try {
                 double latitude = users.get(i).getLatitude();
                 double longitude = users.get(i).getLongitude();
                 String name = users.get(i).getName();
 
-                map.addMarker(new MarkerOptions()
-                        .position(new LatLng(latitude, longitude))
-                        .title(name)).showInfoWindow();
+                LatLng latLng = new LatLng(latitude,longitude);
 
+                map.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(name)).showInfoWindow();
 
             }
             catch (NullPointerException ignored){
-
             }
+        }
+    }
+
+    private void putImage(){
+        for (int i = 0; i<users.size(); i++) {
+            String username = users.get(i).getUser();
+            String link = users.get(i).getLinkToImage();
+            inflateImageLayout(username, link);
+        }
+    }
 
 
+    //    @Override
+//    public void updateRelation(List<Data> usersList) {
+//
+//        for (int newUser = 0;newUser<usersList.size();newUser++){
+//
+//            for (int oldUser = 0; oldUser < users.size();oldUser++){
+//
+//                if (users.get(oldUser).getDeviceID().equals(usersList.get(newUser).getDeviceID())){
+//                    users.remove(oldUser);
+//                }
+//            }
+//        }
+//
+//        scrollView.removeAllViews();
+//        users.addAll(usersList);
+//
+//        map.clear();
+//
+//        for (int i = 0; i<users.size(); i++){
+//
+//            try {
+//                double latitude = users.get(i).getLatitude();
+//                double longitude = users.get(i).getLongitude();
+//                String username = users.get(i).getUser();
+//                String link = users.get(i).getLinkToImage();
+//                String name = users.get(i).getName();
+//
+//                map.addMarker(new MarkerOptions()
+//                        .position(new LatLng(latitude, longitude))
+//                        .title(name)).showInfoWindow();
+//
+//                inflateImageLayout(username,link);
+//
+//
+//            }
+//            catch (NullPointerException ignored){
+//
+//            }
+//
+//
+//        }
+//
+//        if (nameNeedFound != null){
+//            findUser(nameNeedFound);
+//        }
+//    }
+
+    @Override
+    public void updateUser(Data user) {
+        for (int i = 0; i < users.size(); i++){
+             if (users.get(i).getUser().equals(user.getUser())){
+                 double latitude = user.getLatitude();
+                 double longitude= user.getLongitude();
+                 users.get(i).setLatitude(latitude);
+                 users.get(i).setLongitude(longitude);
+                 putMarker();
+
+             }
         }
 
-        if (nameNeedFound != null){
-            findUser(nameNeedFound);
+        if (nameNeedFound!=null){
+            showCameraOnPerson(nameNeedFound);
         }
+
     }
 
 
@@ -205,12 +260,12 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         return new MapViewState();
     }
 
-    @OnClick(R.id.FAB_start_reg) public void StartChildReg(){
+    @OnClick(R.id.FAB_start_reg)
+    public void StartChildReg(){
         getContext().startActivity(new Intent(getActivity(), RegActivityChild.class));
     }
 
-    private void inflateImageLayout() {
-        for (int i = 0; i < users.size(); i++) {
+    private void inflateImageLayout(String user,String link) {
 
             CircleImageView imageView = new CircleImageView(getActivity());
 
@@ -219,17 +274,15 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
             layoutParams.setMargins(10, 8, 10, 8);
             imageView.setLayoutParams(layoutParams);
             Picasso.with(getActivity())
-                    .load(Const.IMAGE_URL + users.get(i).getLinkToImage())
+                    .load(Const.IMAGE_URL + link)
                     .into(imageView);
 
-            scrollView.addView(imageView);
-            final int finalI = i;
-            imageView.setOnClickListener(
-//
-                    v -> findUser(users.get(finalI).getUser())
-            );
+        scrollView.addView(imageView);
+        imageView.setOnClickListener(
+                v -> findUser(user)
+        );
         }
-    }
+
 
     private void setColorImage(int position,int border) {
         ((CircleImageView)scrollView.getChildAt(position)).setBorderColor(getResources().getColor(R.color.chosen));
@@ -284,6 +337,22 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         }
         showPersonAlways();
 
+    }
+
+    private void showCameraOnPerson(String nameNeedFound) {
+        for (int i = 0; i < users.size(); i++){
+            if (users.get(i).getUser().equals(nameNeedFound)){
+                moveCamera(users.get(i));
+            }
+        }
+    }
+
+    private void moveCamera(Data data) {
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(data.getLatitude(),data.getLongitude()))
+                .zoom(ZOOM_FOR_USER)
+                .build();
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
 }

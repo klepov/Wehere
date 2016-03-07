@@ -16,7 +16,8 @@ import klep.wehere.model.users.Users;
  */
 public interface MapView extends MvpView{
 
-    void showUpdate(List<Data> users);
+    void updateRelation(List<Data> users);
+    void updateUser(Data user);
     void showMap();
     void showLoading();
     void showError();
