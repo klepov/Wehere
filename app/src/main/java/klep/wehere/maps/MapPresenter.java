@@ -4,10 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.squareup.picasso.Picasso;
 
@@ -72,6 +74,7 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
 
                     case GET_UPDATE_USER:
                         User updateUser = intent.getExtras().getParcelable(ABSTRACT_USER);
+                        Log.d("updateUser","--------- updateUser --------------");
                         getView().updateUser(updateUser.getData());
 //                        user.add(dataUser);
                         break;

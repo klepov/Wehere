@@ -24,14 +24,11 @@ import klep.wehere.socket.MessageEvent;
 import klep.wehere.socket.SocketAdapter;
 import klep.wehere.utils.Const;
 
-public class HandlerSocketService extends Service implements GoogleApiClient.ConnectionCallbacks, com.google.android.gms.location.LocationListener {
+public class HandlerSocketService extends Service {
     GoogleApiClient googleApiClient;
     LocationRequest locationRequest;
     WebSocket ws;
-    private double latitude;
-    private double longitude;
-    private String IMEI;
-    private String device_id;
+
 
     @Override
     public void onCreate() {
@@ -39,24 +36,6 @@ public class HandlerSocketService extends Service implements GoogleApiClient.Con
         super.onCreate();
         startSocket();
         EventBus.getDefault().registerSticky(this);
-
-
-
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .build();
-
-        googleApiClient.connect();
-
-
-        locationRequest = new LocationRequest();
-//        locationRequest.setSmallestDisplacement(10);
-        locationRequest.setInterval(100); // Update location every 1 minute
-//        locationRequest.setFastestInterval(10000);
-
-
-//        getLocal();
     }
 
     private void startSocket() {
@@ -110,7 +89,6 @@ public class HandlerSocketService extends Service implements GoogleApiClient.Con
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
-        googleApiClient.disconnect();
         try {
 
             ws.disconnect();
@@ -120,35 +98,4 @@ public class HandlerSocketService extends Service implements GoogleApiClient.Con
         stopSelf();
     }
 
-
-    @Override
-    public void onConnected(Bundle bundle) {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                googleApiClient, locationRequest, this);
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-
-//        EventBus.getDefault().post(new MessageEvent(""+CreateJSON.update(IMEI,device_id,latitude,longitude)));
-
-    }
 }

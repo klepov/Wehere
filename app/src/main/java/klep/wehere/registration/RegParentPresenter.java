@@ -6,6 +6,8 @@ import klep.wehere.model.Authentication;
 import klep.wehere.model.RegistrationCredentials;
 import klep.wehere.model.token.Token;
 import klep.wehere.model.token.TokenSubscribe;
+import klep.wehere.utils.CreateJSON;
+import klep.wehere.utils.SendJSONToServer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -37,7 +39,8 @@ public class RegParentPresenter extends RegPresenter {
                     getView().showRegError(1);
                 }else {
                     super.onNext(token);
-                    getView().showRegComplete();
+                    SendJSONToServer.sendJsonToServer(CreateJSON.auth(token.getToken()));
+
                 }
             }
         };

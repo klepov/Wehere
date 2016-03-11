@@ -4,6 +4,7 @@ import com.squareup.okhttp.RequestBody;
 
 import klep.wehere.model.error.ErrorHandlerModel;
 import klep.wehere.model.token.Token;
+import klep.wehere.model.token.TokenTest;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.Header;
@@ -21,6 +22,7 @@ public interface Authentication {
     @POST("api/get-token/")
     Observable<Token> login(@Field("username")String username,
                             @Field("password")String password);
+
     @Multipart
     @POST("api/signup/")
     Observable<Token> registration(@Part("username")String username,
@@ -37,4 +39,5 @@ public interface Authentication {
                                                     @Part("password2")String password2,
                                                     @Part("name_child")String name,
                                                     @Part("image\"; filename=\"image.png\" ")RequestBody photo);
+
 }

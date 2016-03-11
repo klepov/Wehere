@@ -14,6 +14,7 @@ import klep.wehere.model.Authentication;
 import klep.wehere.model.error.ErrorHandlerModel;
 import klep.wehere.model.token.Token;
 import klep.wehere.model.token.TokenSubscribe;
+import klep.wehere.model.token.TokenTest;
 import klep.wehere.utils.CreateJSON;
 import klep.wehere.utils.ErrorCode;
 import klep.wehere.utils.SendJSONToServer;
@@ -51,7 +52,6 @@ public class AuthPresenter extends MvpBasePresenter<AuthView> {
             getView().showLoading();
         }
 
-
         subscriber = new TokenSubscribe() {
             @Override
             public void onError(Throwable e) {
@@ -65,7 +65,7 @@ public class AuthPresenter extends MvpBasePresenter<AuthView> {
             }
         };
 
-        authentication.login(login, password)
+        authentication.login(login,password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);

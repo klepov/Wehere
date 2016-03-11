@@ -1,7 +1,10 @@
 package klep.wehere.common;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
+import klep.wehere.model.token.TokenTest;
 import klep.wehere.utils.Const;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;

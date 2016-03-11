@@ -45,12 +45,17 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         implements MapView {
 
     public static final int ZOOM_FOR_USER = 16;
+    public static final int LATITUDE_DEFAULT = 49;
+    public static final int LONGITUDE_DEFAULTH = 22;
     private List<Data> users;
 
     private GoogleMap map;
 
     private LatLng filter;
     private String nameNeedFound;
+
+
+
 
     @Bind(R.id.map_photo_scroll)LinearLayout scrollView;
 
@@ -77,11 +82,12 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
 
-        Log.d("ss", "ss");
         setUpMapIfNeeded();
-        users = new ArrayList<>();
+        if (users == null){
+            users = new ArrayList<>();
+        }
         return view;
     }
 
@@ -98,9 +104,11 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     public void onResume() {
         super.onResume();
 //        mapView.onResume();
-        Log.d("onResume","onResume");
-        String token = Token.find(Token.class,null).get(0).getToken();
-        presenter.getRelation(token);
+        Log.d("onResume", "onResume");
+        if (users.size() == 0) {
+            String token = Token.find(Token.class, null).get(0).getToken();
+            presenter.getRelation(token);
+        }
     }
 
 
@@ -167,53 +175,6 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         }
     }
 
-
-    //    @Override
-//    public void updateRelation(List<Data> usersList) {
-//
-//        for (int newUser = 0;newUser<usersList.size();newUser++){
-//
-//            for (int oldUser = 0; oldUser < users.size();oldUser++){
-//
-//                if (users.get(oldUser).getDeviceID().equals(usersList.get(newUser).getDeviceID())){
-//                    users.remove(oldUser);
-//                }
-//            }
-//        }
-//
-//        scrollView.removeAllViews();
-//        users.addAll(usersList);
-//
-//        map.clear();
-//
-//        for (int i = 0; i<users.size(); i++){
-//
-//            try {
-//                double latitude = users.get(i).getLatitude();
-//                double longitude = users.get(i).getLongitude();
-//                String username = users.get(i).getUser();
-//                String link = users.get(i).getLinkToImage();
-//                String name = users.get(i).getName();
-//
-//                map.addMarker(new MarkerOptions()
-//                        .position(new LatLng(latitude, longitude))
-//                        .title(name)).showInfoWindow();
-//
-//                inflateImageLayout(username,link);
-//
-//
-//            }
-//            catch (NullPointerException ignored){
-//
-//            }
-//
-//
-//        }
-//
-//        if (nameNeedFound != null){
-//            findUser(nameNeedFound);
-//        }
-//    }
 
     @Override
     public void updateUser(Data user) {
@@ -299,7 +260,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
         }else {
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(49,22))
+                    .target(new LatLng(LATITUDE_DEFAULT, LONGITUDE_DEFAULTH))
                     .build();
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
@@ -341,7 +302,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
     private void showCameraOnPerson(String nameNeedFound) {
         for (int i = 0; i < users.size(); i++){
-            if (users.get(i).getUser().equals(nameNeedFound)){
+            if (users.get(i).getUser().equals(nameNeedFound) && users.get(i).getLatitude() != null){
                 moveCamera(users.get(i));
             }
         }
