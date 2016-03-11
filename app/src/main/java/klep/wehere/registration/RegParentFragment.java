@@ -13,7 +13,7 @@ public class RegParentFragment extends RegFragment {
 
     @Override
     public RegPresenter createPresenter() {
-        return new RegParentPresenter();
+        return new RegParentPresenter(getActivity());
     }
 
 

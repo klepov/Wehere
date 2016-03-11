@@ -1,6 +1,12 @@
 package klep.wehere.registration;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+
 import klep.wehere.common.RegPresenter;
+import klep.wehere.common.RegView;
 import klep.wehere.common.ServiceRetrofit;
 import klep.wehere.model.Authentication;
 import klep.wehere.model.RegistrationCredentials;
@@ -17,8 +23,16 @@ import rx.schedulers.Schedulers;
  */
 public class RegParentPresenter extends RegPresenter {
     Subscriber<Token> subscriber;
+    BroadcastReceiver engineReceiver;
 
+    public static final String WS_AUTH = "WS_AUTH";
+    public static final String EngineReceiver = "EnginePresenterReceiver";
+    public static final int SUCCESS = 77;
+    Context context;
 
+    RegParentPresenter(Context context) {
+        this.context = context;
+    }
     @Override
     public void doReg(RegistrationCredentials credentials) {
         if (isViewAttached()){
@@ -55,5 +69,37 @@ public class RegParentPresenter extends RegPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
 
+    }
+
+    public void startReceiver() {
+        engineReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int error = intent.getExtras().getInt(WS_AUTH);
+                if (error == SUCCESS) {
+
+                    getView().showRegComplete();
+                } else {
+                    getView().showRegError(error);
+                }
+
+            }
+        };
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(EngineReceiver);
+        context.registerReceiver(engineReceiver,intentFilter);
+    }
+
+    @Override
+    public void attachView(RegView view) {
+        super.attachView(view);
+        startReceiver();
+    }
+
+    @Override
+    public void detachView(boolean retainInstance) {
+        super.detachView(retainInstance);
+        context.unregisterReceiver(engineReceiver);
     }
 }

@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import klep.wehere.auth.AuthView;
 import klep.wehere.common.ServiceRetrofit;
 import klep.wehere.model.Authentication;
 import klep.wehere.model.error.ErrorHandlerModel;
