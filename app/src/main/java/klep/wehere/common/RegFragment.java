@@ -3,9 +3,12 @@ package klep.wehere.common;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
@@ -14,6 +17,8 @@ import android.widget.EditText;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.hkm.ui.processbutton.iml.ActionProcessButton;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.sangcomz.fishbun.FishBun;
 import com.sangcomz.fishbun.define.Define;
 
@@ -32,7 +37,7 @@ import klep.wehere.utils.ErrorCode;
 /**
  * Created by klep.io on 14.02.16.
  */
-public abstract class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> implements RegView {
+public abstract class RegFragment extends BaseViewStateFragment<RegView,RegPresenter> implements RegView, View.OnClickListener {
 
     @Bind(R.id.loginReg)
     EditText loginEdit;
@@ -47,7 +52,8 @@ public abstract class RegFragment extends BaseViewStateFragment<RegView,RegPrese
     @Bind(R.id.btn_photo_parent)
     CircleImageView photoParentButton;
 
-
+    @Bind(R.id.toolbar_reg)
+    Toolbar toolbar;
 
 
     public RegOk regOk;
@@ -55,8 +61,17 @@ public abstract class RegFragment extends BaseViewStateFragment<RegView,RegPrese
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        btnReg.setMode(ActionProcessButton.Mode.ENDLESS);
+        toolbar.setTitle("назад");
 
+        Drawable exitNews = new IconicsDrawable(getActivity())
+                .icon(CommunityMaterial.Icon.cmd_close)
+                .color(ContextCompat.getColor(getActivity(), R.color.md_white_1000))
+                .sizeDp(16);
+
+        toolbar.setNavigationIcon(exitNews);
+        toolbar.setNavigationOnClickListener(this);
+
+        btnReg.setMode(ActionProcessButton.Mode.ENDLESS);
         btnReg.setOnClickNormalState(v -> onRegClicked());
 
         if (savedInstanceState != null){
@@ -199,6 +214,11 @@ public abstract class RegFragment extends BaseViewStateFragment<RegView,RegPrese
     @Override
     public void showImage(Bitmap bitmap) {
         photoParentButton.setImageBitmap(bitmap);
+    }
+
+    @Override
+    public void onClick(View v) {
+        getActivity().finish();
     }
 
     public interface RegOk{

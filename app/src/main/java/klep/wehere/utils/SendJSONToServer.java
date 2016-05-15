@@ -12,9 +12,7 @@ import klep.wehere.socket.MessageEvent;
  */
 public class SendJSONToServer {
     public static void sendJsonToServer(JSONObject json) {
-        Log.d("send",""+json);
         send(String.valueOf(json));
-
     }
 
     private static void send(final String json) {

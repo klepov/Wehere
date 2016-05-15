@@ -1,15 +1,13 @@
 package klep.wehere.addChildren;
 
-import android.util.Log;
-
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.orhanobut.hawk.Hawk;
 
 import klep.wehere.common.RegPresenter;
 import klep.wehere.common.ServiceRetrofit;
 import klep.wehere.model.Authentication;
 import klep.wehere.model.RegistrationCredentials;
 import klep.wehere.model.error.ErrorHandlerModel;
-import klep.wehere.model.token.Token;
+import klep.wehere.utils.Const;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -18,10 +16,10 @@ import rx.schedulers.Schedulers;
  * Created by klep.io on 14.02.16.
  */
 public class RegPresenterChild extends RegPresenter {
-    Subscriber <ErrorHandlerModel> subscriber;
+    Subscriber<ErrorHandlerModel> subscriber;
 
-    public void doReg(RegistrationCredentials credentials){
-        if (isViewAttached()){
+    public void doReg(RegistrationCredentials credentials) {
+        if (isViewAttached()) {
             getView().showRegLoading();
         }
         final Authentication authentication = ServiceRetrofit
@@ -39,7 +37,7 @@ public class RegPresenterChild extends RegPresenter {
 
             @Override
             public void onNext(ErrorHandlerModel errorHandlerModel) {
-                if (errorHandlerModel.getData().getCode() == 99 && isViewAttached()){
+                if (errorHandlerModel.getData().getCode() == 99 && isViewAttached()) {
                     getView().showRegComplete();
                 }
 
@@ -49,8 +47,8 @@ public class RegPresenterChild extends RegPresenter {
             }
         };
 
-        String token = Token.find(Token.class,null).get(0).getToken();
-        String con = "Token "+token;
+        String token = Hawk.get(Const.TOKEN);
+        String con = "Token " + token;
         authentication.registrationChild(
                 con,
                 credentials.getLogin(),

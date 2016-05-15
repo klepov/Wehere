@@ -4,17 +4,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 import klep.wehere.model.user.User;
 import klep.wehere.model.users.Data;
@@ -33,7 +32,6 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
     private Context context;
     BroadcastReceiver mapReceiver;
     public final static String ABSTRACT_USER = "MapReceiver.class";
-
     private List<Data> user;
     public MapPresenter(Context context) {
         super();
@@ -47,34 +45,37 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
         regReceiver();
     }
 
+    @Override
+    public void detachView(boolean retainInstance) {
+        super.detachView(retainInstance);
+        context.unregisterReceiver(mapReceiver);
+
+    }
+
+
+
     public void getRelation(String token){
 
         SendJSONToServer.sendJsonToServer(CreateJSON.listRelation(token));
 //        getView().showLoading();
     }
 
-    @Override
-    public void detachView(boolean retainInstance) {
-        super.detachView(retainInstance);
-        context.unregisterReceiver(mapReceiver);
-    }
 
     private void regReceiver(){
         mapReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Data dataUser;
                 switch (intent.getAction()){
                     case GET_RELATIONS:
                         Users userRelation = intent.getExtras().getParcelable(ABSTRACT_USER);
                         user.addAll(userRelation.getData());
+//                        WrapperSugarORM.saveUsers(user);
                         getView().updateRelation(user);
                         break;
 
 
                     case GET_UPDATE_USER:
                         User updateUser = intent.getExtras().getParcelable(ABSTRACT_USER);
-                        Log.d("updateUser","--------- updateUser --------------");
                         getView().updateUser(updateUser.getData());
 //                        user.add(dataUser);
                         break;

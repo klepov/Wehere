@@ -3,6 +3,7 @@ package klep.wehere.maps;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,7 +18,7 @@ import klep.wehere.services.UpdateLocationService;
 import klep.wehere.utils.CreateJSON;
 import klep.wehere.utils.SendJSONToServer;
 
-public class HandleActivity extends AppCompatActivity
+public class HandleActivity extends FragmentActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -26,7 +27,7 @@ public class HandleActivity extends AppCompatActivity
         setContentView(R.layout.activity_handle);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -41,7 +42,7 @@ public class HandleActivity extends AppCompatActivity
         startService(new Intent(this, UpdateLocationService.class));
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentPlace,MapFragment.newInstance()).commit();
+                .replace(R.id.fragmentPlace,MapsFragment.newInstance()).commit();
     }
 
     @Override

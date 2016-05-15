@@ -23,6 +23,8 @@ public class ErrorCode {
         CODE_ERROR.put(5, R.string.error_5);
         CODE_ERROR.put(6, R.string.error_6);
         CODE_ERROR.put(7, R.string.error_7);
+        CODE_ERROR.put(999, R.string.error_999);
+        CODE_ERROR.put(666, R.string.error_666);
     }
 
 

@@ -8,28 +8,18 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketException;
-import com.neovisionaries.ws.client.WebSocketFactory;
+import com.orhanobut.hawk.Hawk;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
-
-import de.greenrobot.event.EventBus;
-import klep.wehere.model.token.Token;
-import klep.wehere.socket.MessageEvent;
-import klep.wehere.socket.SocketAdapter;
 import klep.wehere.utils.Const;
 import klep.wehere.utils.CreateJSON;
 import klep.wehere.utils.SendJSONToServer;
@@ -62,8 +52,8 @@ public class UpdateLocationService extends Service implements GoogleApiClient.Co
 
 
         locationRequest = new LocationRequest();
-//        locationRequest.setSmallestDisplacement(10);
-        locationRequest.setInterval(1000); // Update location every 1 minute
+        locationRequest.setSmallestDisplacement(3);
+        locationRequest.setInterval(60000); // Update location every 1 minute
 //        locationRequest.setFastestInterval(10000);
 
 
@@ -71,13 +61,11 @@ public class UpdateLocationService extends Service implements GoogleApiClient.Co
     }
 
 
-
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
-
 
 
     @Override
@@ -116,15 +104,13 @@ public class UpdateLocationService extends Service implements GoogleApiClient.Co
         latitude = location.getLatitude();
         longitude = location.getLongitude();
 
-        if (Token.count(Token.class) == 0){
+        String token = Hawk.get(Const.TOKEN);
+        if (token == null) {
             return;
         }
-        String token = Token.find(Token.class,null).get(0).getToken();
         JSONObject json = CreateJSON.
-                updateLocation(token, device_id,IMEI,latitude,longitude);
+                updateLocation(token, device_id, IMEI, latitude, longitude);
         SendJSONToServer.sendJsonToServer(json);
-
-//        EventBus.getDefault().post(new MessageEvent(""+CreateJSON.update(IMEI,device_id,latitude,longitude)));
 
     }
 }

@@ -32,7 +32,7 @@ public class AuthPresenter extends MvpBasePresenter<AuthView> {
 
     public static final String WS_AUTH = "WS_AUTH";
     public static final String EngineReceiver = "EnginePresenterReceiver";
-    public static final int SUCCESS = 77;
+    public static final int SUCCESS = 666;
     private BroadcastReceiver engineReceiver;
 
     Subscriber<Token> subscriber;

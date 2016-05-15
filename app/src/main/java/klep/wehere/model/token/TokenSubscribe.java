@@ -1,5 +1,8 @@
 package klep.wehere.model.token;
 
+import com.orhanobut.hawk.Hawk;
+
+import klep.wehere.utils.Const;
 import rx.Subscriber;
 
 /**
@@ -16,10 +19,7 @@ public abstract class TokenSubscribe extends Subscriber<Token> {
 
     @Override
     public void onNext(Token token) {
-        int tokenCount = (int) Token.count(Token.class,null,null);
-        if (tokenCount > 0){
-            Token.deleteAll(Token.class);
-        }
-        new Token(token.getToken()).save();
+        Hawk.clear();
+        Hawk.put(Const.TOKEN,token.getToken());
     }
 }

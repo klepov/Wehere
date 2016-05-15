@@ -4,39 +4,39 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_linearlayout">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="140dp"
-        android:layout_height="158dp"
+    <FrameLayout
+        android:layout_width="177dp"
+        android:layout_height="179dp"
         android:background="@drawable/ic_logo"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center" />
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|bottom|center"
-        android:layout_marginBottom="@dimen/bottom_login"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
-
-        <Button
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/reg"
-            android:textColor="#1565C0"
-            android:text="@string/reg"
-            android:background="#E0E0E0"
-            android:layout_marginBottom="8dp" />
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|bottom|center"
+            android:layout_marginBottom="@dimen/bottom_login"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/login"
-            android:textColor="#BBDEFB"
-            android:background="#42A5F5"
-            android:id="@+id/login"
-            />
-    </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/reg"
+                android:textColor="#BBDEFB"
+                android:text="@string/reg"
+                android:background="#3db9e8"
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/login"
+                android:textColor="#BBDEFB"
+                android:background="#3db9e8"
+                android:id="@+id/login"
+                />
+        </LinearLayout>
+
 
 </LinearLayout>

@@ -12,6 +12,7 @@
     <string name="hint_login_child">Введите логин</string>
 
     <!-- code error-->
+    <!--0 < server side; 999 > client side-->
     <string name="error_1">пользователь уже существует</string>
     <string name="error_2">логин или пароль не верны</string>
     <string name="error_3">пароли не совпадают</string>
@@ -19,6 +20,7 @@
     <string name="error_5">Пользователь не существует</string>
     <string name="error_6">Войдите в аккаунт</string>
     <string name="error_0">неизвестная ошибка</string>
+    <string name="error_999">За этого пользователя никто не входил</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -28,6 +30,7 @@
     <string name="title_activity_handle">HandleActivity</string>
     <string name="error_7">эта функция доступна только родителю</string>
     <string name="get_name">Введите имя</string>
+    <string name="error_666">Все хорошо</string>
 
 
 </resources>

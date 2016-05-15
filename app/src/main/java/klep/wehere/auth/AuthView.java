@@ -7,8 +7,8 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
  */
 public interface AuthView extends MvpView{
 
-    public void showAuthForm();
-    public void showError(int error);
-    public void showLoading();
-    public void authSuccessful();
+    void showAuthForm();
+    void showError(int error);
+    void showLoading();
+    void authSuccessful();
 }

@@ -8,10 +8,9 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;
-import com.orm.SugarRecord;
 
 @ParcelablePlease
-public class Token extends SugarRecord implements Parcelable{
+public class Token implements Parcelable {
 
 
     @SerializedName("token")
@@ -19,23 +18,21 @@ public class Token extends SugarRecord implements Parcelable{
     public String token;
 
     /**
-     * 
-     * @return
-     *     The token
+     * @return The token
      */
     public String getToken() {
         return token;
     }
 
-    public Token(){}
+    public Token() {
+    }
+
     public Token(String token) {
         this.token = token;
     }
 
     /**
-     * 
-     * @param token
-     *     The token
+     * @param token The token
      */
     public void setToken(String token) {
         this.token = token;

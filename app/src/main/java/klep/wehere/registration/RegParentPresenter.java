@@ -27,7 +27,7 @@ public class RegParentPresenter extends RegPresenter {
 
     public static final String WS_AUTH = "WS_AUTH";
     public static final String EngineReceiver = "EnginePresenterReceiver";
-    public static final int SUCCESS = 77;
+    public static final int SUCCESS = 666;
     Context context;
 
     RegParentPresenter(Context context) {
@@ -101,5 +101,12 @@ public class RegParentPresenter extends RegPresenter {
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
         context.unregisterReceiver(engineReceiver);
+        cancelSubscribe();
+    }
+
+    private void cancelSubscribe(){
+        if (subscriber != null && !subscriber.isUnsubscribed()){
+            subscriber.unsubscribe();
+        }
     }
 }

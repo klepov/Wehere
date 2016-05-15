@@ -2,7 +2,9 @@
 package klep.wehere.maps;
 
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,11 +18,19 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
+import com.orhanobut.hawk.Hawk;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -37,12 +47,13 @@ import klep.wehere.common.LoadingDialogFragment;
 import klep.wehere.model.token.Token;
 import klep.wehere.model.users.Data;
 import klep.wehere.utils.Const;
+import klep.wehere.utils.ErrorCode;
 
 /**
  * Created by klep.io on 07.01.16.
  */
-public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
-        implements MapView {
+public class MapsFragment extends BaseViewStateFragment<MapView,MapPresenter>
+        implements MapView, GoogleMap.OnMapClickListener {
 
     public static final int ZOOM_FOR_USER = 16;
     public static final int LATITUDE_DEFAULT = 49;
@@ -54,17 +65,18 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     private LatLng filter;
     private String nameNeedFound;
 
-
-
+    private int marginLeft;
+    private int marginRight;
+    private int marginBottom;
+    private int marginTop;
+    private int size_pic;
 
     @Bind(R.id.map_photo_scroll)LinearLayout scrollView;
 
-
-
-    public static MapFragment newInstance(){
-        MapFragment fragmentMap = new MapFragment();
+    public static MapsFragment newInstance(){
+        MapsFragment fragmentMap = new MapsFragment();
         Bundle args = new Bundle();
-        return fragmentMap;
+        return  fragmentMap;
     }
 
     @Override
@@ -76,7 +88,11 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        initDimens();
+
     }
+
+
 
     @Nullable
     @Override
@@ -84,29 +100,37 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         ButterKnife.bind(this, view);
 
-        setUpMapIfNeeded();
+
+        setUpMap();
         if (users == null){
             users = new ArrayList<>();
         }
+
+
         return view;
     }
 
-    private void setUpMapIfNeeded() {
+    private void setUpMap() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (map == null) {
-            map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map1))
-                    .getMap();
+
+            ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map1))
+                    .getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            map = googleMap;
+                        }
+                    });
         }
     }
-
 
     @Override
     public void onResume() {
         super.onResume();
 //        mapView.onResume();
-        Log.d("onResume", "onResume");
+
         if (users.size() == 0) {
-            String token = Token.find(Token.class, null).get(0).getToken();
+            String token = Hawk.get(Const.TOKEN);
             presenter.getRelation(token);
         }
     }
@@ -118,10 +142,6 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         return new MapPresenter(getActivity());
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public void onDestroyView() {
@@ -129,10 +149,6 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         ButterKnife.unbind(this);
     }
 
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-    }
 
 
     @Override
@@ -165,6 +181,8 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
             catch (NullPointerException ignored){
             }
         }
+
+
     }
 
     private void putImage(){
@@ -230,9 +248,9 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
 
             CircleImageView imageView = new CircleImageView(getActivity());
 
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(60, 60);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size_pic,size_pic);
             layoutParams.gravity = Gravity.CENTER;
-            layoutParams.setMargins(10, 8, 10, 8);
+            layoutParams.setMargins(marginLeft,marginTop,marginRight,marginBottom);
             imageView.setLayoutParams(layoutParams);
             Picasso.with(getActivity())
                     .load(Const.IMAGE_URL + link)
@@ -279,7 +297,7 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
                 try {
                     createLatLng(userFound.getLatitude(),userFound.getLongitude(),i);
                 }catch (NullPointerException e){
-                    Snackbar.make(getView(),"За этого пользователя никто не входил",Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(getView(), ErrorCode.getCodeError(getActivity(),999),Snackbar.LENGTH_LONG).show();
                     setColorImage(i,0);
                 }
             }else {
@@ -316,4 +334,17 @@ public class MapFragment extends BaseViewStateFragment<MapView,MapPresenter>
         map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
+
+    private void initDimens() {
+        marginLeft   = (int) getResources().getDimension(R.dimen.margin_left);
+        marginRight  = (int) getResources().getDimension(R.dimen.margin_right);
+        marginBottom = (int) getResources().getDimension(R.dimen.margin_bottom);
+        marginTop    = (int) getResources().getDimension(R.dimen.margin_top);
+        size_pic    = (int) getResources().getDimension(R.dimen.size_pic_preview);
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        map.addPolyline(new PolylineOptions().add(latLng));
+    }
 }
