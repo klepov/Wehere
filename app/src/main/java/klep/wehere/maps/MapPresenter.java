@@ -69,7 +69,6 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
                     case GET_RELATIONS:
                         Users userRelation = intent.getExtras().getParcelable(ABSTRACT_USER);
                         user.addAll(userRelation.getData());
-//                        WrapperSugarORM.saveUsers(user);
                         getView().updateRelation(user);
                         break;
 

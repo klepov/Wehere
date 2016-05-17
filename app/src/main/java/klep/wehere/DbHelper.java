@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import klep.wehere.model.users.Data;
+import klep.wehere.model.users.Users;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 

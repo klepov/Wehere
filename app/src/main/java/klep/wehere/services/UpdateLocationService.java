@@ -30,7 +30,6 @@ public class UpdateLocationService extends Service implements GoogleApiClient.Co
     WebSocket ws;
     private double latitude;
     private double longitude;
-    private String IMEI;
     private String device_id;
 
     @Override
@@ -40,7 +39,6 @@ public class UpdateLocationService extends Service implements GoogleApiClient.Co
 
 //
         TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        IMEI = mngr.getDeviceId();
         device_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -109,7 +107,7 @@ public class UpdateLocationService extends Service implements GoogleApiClient.Co
             return;
         }
         JSONObject json = CreateJSON.
-                updateLocation(token, device_id, IMEI, latitude, longitude);
+                updateLocation(token, device_id, latitude, longitude);
         SendJSONToServer.sendJsonToServer(json);
 
     }

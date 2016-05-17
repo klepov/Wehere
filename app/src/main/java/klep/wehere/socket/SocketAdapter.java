@@ -80,8 +80,6 @@ public class SocketAdapter extends WebSocketAdapter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(jsonObject -> new Gson().fromJson(""+json,Users.class))
                 .subscribe(new SocketListener(context));
-
-
     }
 
     private void parseUser(JSONObject json){
@@ -96,24 +94,6 @@ public class SocketAdapter extends WebSocketAdapter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(jsonObject -> new Gson().fromJson(""+json,User.class))
                 .subscribe(new SocketListener(context));
-//                .subscribe(new Subscriber<User>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        Log.d("asd","asd");
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        Log.d("asd","asd");
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(User users) {
-//                        Log.d("asd","asd");
-//
-//                    }
-//                });
 
     }
 

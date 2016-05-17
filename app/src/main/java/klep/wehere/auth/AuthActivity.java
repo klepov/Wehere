@@ -17,9 +17,6 @@ public class AuthActivity extends AppCompatActivity implements AuthLoginFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_auth);
-//        toolbar.setTitle("назад");
-//        setSupportActionBar(toolbar);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, new AuthLoginFragment())
