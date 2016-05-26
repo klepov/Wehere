@@ -41,6 +41,8 @@ dependencies {
     provided 'frankiesardo:icepick-processor:3.1.0'
 }
 
+
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
@@ -92,4 +94,8 @@ dependencies {
 
 
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha1'
+
+    compile('com.mikepenz:materialdrawer:5.2.7@aar') {
+        transitive = true
+    }
 }

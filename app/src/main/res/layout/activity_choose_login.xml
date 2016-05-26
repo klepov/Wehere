@@ -1,42 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_linearlayout">
-
-    <FrameLayout
-        android:layout_width="177dp"
-        android:layout_height="179dp"
-        android:background="@drawable/ic_logo"
-        android:layout_gravity="center" />
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorPrimary"
+              android:orientation="vertical"
+    >
 
     <LinearLayout
-            android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/bottom_login"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center_vertical|bottom|center"
+        android:orientation="vertical"
+        >
+
+        <Button
+            android:id="@+id/reg"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|bottom|center"
-            android:layout_marginBottom="@dimen/bottom_login"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_shape"
+            android:text="@string/reg"
+            android:textColor="@color/white"
+            />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/reg"
-                android:textColor="#BBDEFB"
-                android:text="@string/reg"
-                android:background="#3db9e8"
-                android:layout_marginBottom="8dp" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/login"
-                android:textColor="#BBDEFB"
-                android:background="#3db9e8"
-                android:id="@+id/login"
-                />
-        </LinearLayout>
+        <Button
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape"
+            android:text="@string/login"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
 
 
 </LinearLayout>

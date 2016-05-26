@@ -3,20 +3,27 @@ package klep.wehere.listPeople;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import de.hdodenhof.circleimageview.CircleImageView;
 import klep.wehere.DbHelper;
 import klep.wehere.R;
@@ -30,10 +37,19 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 /**
  * Created by klep.io on 12.03.16.
  */
-public class FragmentListPeople extends BaseFragment {
+public class FragmentListPeople extends BaseFragment implements View.OnClickListener {
     private SQLiteDatabase db;
     List<Data> userList = new ArrayList<>();
     private Adapter adapter;
+
+
+    @Bind(R.id.toolbar_list)
+    Toolbar toolbar;
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
     @Override
     protected int getLayoutRes() {
@@ -43,7 +59,18 @@ public class FragmentListPeople extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        toolbar.setTitle("назад");
 
+        Drawable exitNews = new IconicsDrawable(getActivity())
+                .icon(CommunityMaterial.Icon.cmd_close)
+                .color(ContextCompat.getColor(getActivity(), R.color.md_white_1000))
+                .sizeDp(16);
+
+        toolbar.setNavigationIcon(exitNews);
+        toolbar.setNavigationOnClickListener(this);
+
+
+        getActivity().getActionBar();
         DbHelper dbHelper = new DbHelper(getActivity());
         db = dbHelper.getWritableDatabase();
 
@@ -60,6 +87,11 @@ public class FragmentListPeople extends BaseFragment {
 
         ListView lvMain = (ListView) view.findViewById(R.id.adapter);
         lvMain.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        getActivity().finish();
     }
 }
 
