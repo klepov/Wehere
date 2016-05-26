@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -50,8 +51,8 @@ public class UpdateLocationService extends Service implements GoogleApiClient.Co
 
 
         locationRequest = new LocationRequest();
-        locationRequest.setSmallestDisplacement(3);
-        locationRequest.setInterval(60000); // Update location every 1 minute
+//        locationRequest.setSmallestDisplacement(3);
+        locationRequest.setInterval(5000); // Update location every 1 minute
 //        locationRequest.setFastestInterval(10000);
 
 
@@ -101,6 +102,7 @@ public class UpdateLocationService extends Service implements GoogleApiClient.Co
 
         latitude = location.getLatitude();
         longitude = location.getLongitude();
+        Log.d("coordinate", latitude + " " + longitude);
 
         String token = Hawk.get(Const.TOKEN);
         if (token == null) {

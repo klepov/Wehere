@@ -10,6 +10,7 @@ import com.roughike.bottombar.OnMenuTabClickListener;
 
 import klep.wehere.R;
 import klep.wehere.common.BaseActivity;
+import klep.wehere.listPeople.ActivityListUser;
 import klep.wehere.services.UpdateLocationService;
 
 public class HandleActivity extends BaseActivity {
@@ -33,6 +34,9 @@ public class HandleActivity extends BaseActivity {
                     case R.id.bottomMap:
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.fragmentPlace, MapsFragment.newInstance()).commit();
+                        break;
+                    case R.id.bottomUser:
+                        startActivity(new Intent(getApplicationContext(), ActivityListUser.class));
                         break;
                 }
             }

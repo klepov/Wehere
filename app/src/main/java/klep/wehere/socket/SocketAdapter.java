@@ -12,7 +12,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Map;
 
+import de.greenrobot.event.EventBus;
 import klep.wehere.auth.AuthPresenter;
 import klep.wehere.model.user.User;
 import klep.wehere.model.users.Users;
@@ -20,25 +22,36 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by dima on 10.11.15.
- */
 public class SocketAdapter extends WebSocketAdapter {
 
     private static final String AUTH = "auth";
     private static final String RELATION = "list_relation";
     private static final String UPDATE = "update";
     private Context context;
+    private WebSocket ws;
 
     public SocketAdapter(Context context) {
         this.context = context;
+        EventBus.getDefault().registerSticky(this);
+    }
+
+    @Override
+    public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+        super.onConnected(websocket, headers);
+        ws = websocket;
     }
 
     @Override
     public void onTextMessage(WebSocket websocket, String text) throws Exception {
         parserJSON(text);
-        Log.d("LOGGGGG",text);
+        Log.d("LOGGGGG", text);
     }
+
+
+    public void onEvent(MessageEvent event) {
+        ws.sendText(event.json);
+    }
+
 
     private void parserJSON(String text) {
         try {
@@ -46,19 +59,15 @@ public class SocketAdapter extends WebSocketAdapter {
             String method = json.getString("method");
             Intent intent;
 
-            switch (method){
+            switch (method) {
                 case AUTH:
-
                     int code = new JSONObject(json.getString("data")).getInt("code");
                     intent = new Intent(AuthPresenter.EngineReceiver);
-                    intent.putExtra(AuthPresenter.WS_AUTH,code);
-
+                    intent.putExtra(AuthPresenter.WS_AUTH, code);
                     context.sendBroadcast(intent);
                     break;
-
                 case RELATION:
                     parseUsers(json);
-
                 case UPDATE:
                     parseUser(json);
             }
@@ -78,11 +87,11 @@ public class SocketAdapter extends WebSocketAdapter {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(jsonObject -> new Gson().fromJson(""+json,Users.class))
+                .map(jsonObject -> new Gson().fromJson("" + json, Users.class))
                 .subscribe(new SocketListener(context));
     }
 
-    private void parseUser(JSONObject json){
+    private void parseUser(JSONObject json) {
 
 
         Observable<User> observableList = (Observable<User>) Observable.just(json)
@@ -92,11 +101,10 @@ public class SocketAdapter extends WebSocketAdapter {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(jsonObject -> new Gson().fromJson(""+json,User.class))
+                .map(jsonObject -> new Gson().fromJson("" + json, User.class))
                 .subscribe(new SocketListener(context));
 
     }
-
 
 
 }

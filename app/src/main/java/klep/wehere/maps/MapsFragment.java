@@ -7,12 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,15 +21,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.orhanobut.hawk.Hawk;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import klep.wehere.DbHelper;
 import klep.wehere.R;
 import klep.wehere.addChildren.RegActivityChild;
@@ -40,7 +34,6 @@ import klep.wehere.common.BaseViewStateFragment;
 import klep.wehere.common.LoadingDialogFragment;
 import klep.wehere.model.users.Data;
 import klep.wehere.utils.Const;
-import klep.wehere.utils.ErrorCode;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
@@ -60,15 +53,9 @@ public class MapsFragment extends BaseViewStateFragment<MapView, MapPresenter>
     private LatLng filter;
     private String nameNeedFound;
 
-    private int marginLeft;
-    private int marginRight;
-    private int marginBottom;
-    private int marginTop;
-    private int size_pic;
+
     private SQLiteDatabase db;
 
-    @Bind(R.id.map_photo_scroll)
-    LinearLayout scrollView;
 
     public static MapsFragment newInstance() {
         MapsFragment fragmentMap = new MapsFragment();
@@ -85,7 +72,6 @@ public class MapsFragment extends BaseViewStateFragment<MapView, MapPresenter>
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        initDimens();
         DbHelper dbHelper = new DbHelper(getActivity());
         db = dbHelper.getWritableDatabase();
     }
@@ -156,7 +142,6 @@ public class MapsFragment extends BaseViewStateFragment<MapView, MapPresenter>
     public void updateRelation(List<Data> users) {
         this.users.addAll(users);
         putMarker();
-        putImage();
     }
 
     private void putMarker() {
@@ -172,19 +157,8 @@ public class MapsFragment extends BaseViewStateFragment<MapView, MapPresenter>
                 map.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title(name)).showInfoWindow();
-
             } catch (NullPointerException ignored) {
             }
-        }
-
-
-    }
-
-    private void putImage() {
-        for (int i = 0; i < users.size(); i++) {
-            String username = users.get(i).getUser();
-            String link = users.get(i).getLinkToImage();
-            inflateImageLayout(username, link);
         }
     }
 
@@ -240,30 +214,6 @@ public class MapsFragment extends BaseViewStateFragment<MapView, MapPresenter>
         getContext().startActivity(new Intent(getActivity(), RegActivityChild.class));
     }
 
-    private void inflateImageLayout(String user, String link) {
-
-        CircleImageView imageView = new CircleImageView(getActivity());
-
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size_pic, size_pic);
-        layoutParams.gravity = Gravity.CENTER;
-        layoutParams.setMargins(marginLeft, marginTop, marginRight, marginBottom);
-        imageView.setLayoutParams(layoutParams);
-        Picasso.with(getActivity())
-                .load(Const.IMAGE_URL + link)
-                .into(imageView);
-
-        scrollView.addView(imageView);
-        imageView.setOnClickListener(
-                v -> findUser(user)
-        );
-    }
-
-
-    private void setColorImage(int position, int border) {
-        ((CircleImageView) scrollView.getChildAt(position)).setBorderColor(getResources().getColor(R.color.chosen));
-        ((CircleImageView) scrollView.getChildAt(position)).setBorderWidth(border);
-    }
-
     private void showPersonAlways() {
         if (filter != null) {
             CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -279,39 +229,6 @@ public class MapsFragment extends BaseViewStateFragment<MapView, MapPresenter>
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         }
-    }
-
-
-    private void findUser(String name) {
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUser().equals(name)) {
-                Data userFound = users.get(i);
-                nameNeedFound = userFound.getUser();
-
-
-                setColorImage(i, 2);
-                try {
-                    createLatLng(userFound.getLatitude(), userFound.getLongitude(), i);
-                } catch (NullPointerException e) {
-                    Snackbar.make(getView(), ErrorCode.getCodeError(getActivity(), 999), Snackbar.LENGTH_LONG).show();
-                    setColorImage(i, 0);
-                }
-            } else {
-                ((CircleImageView) scrollView.getChildAt(i)).setBorderWidth(0);
-            }
-        }
-    }
-
-    private void createLatLng(Double latitude, Double longitude, int position) {
-        LatLng oldFilter = filter;
-        filter = new LatLng(latitude, longitude);
-        if (oldFilter != null && oldFilter.equals(filter)) {
-            filter = null;
-            nameNeedFound = null;
-            setColorImage(position, 0);
-        }
-        showPersonAlways();
-
     }
 
     private void showCameraOnPerson(String nameNeedFound) {
@@ -330,14 +247,6 @@ public class MapsFragment extends BaseViewStateFragment<MapView, MapPresenter>
         map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-
-    private void initDimens() {
-        marginLeft = (int) getResources().getDimension(R.dimen.margin_left);
-        marginRight = (int) getResources().getDimension(R.dimen.margin_right);
-        marginBottom = (int) getResources().getDimension(R.dimen.margin_bottom);
-        marginTop = (int) getResources().getDimension(R.dimen.margin_top);
-        size_pic = (int) getResources().getDimension(R.dimen.size_pic_preview);
-    }
 
     @Override
     public void onMapClick(LatLng latLng) {
