@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,7 +14,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 import klep.wehere.model.user.User;
 import klep.wehere.model.users.Data;
@@ -33,6 +33,7 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
     BroadcastReceiver mapReceiver;
     public final static String ABSTRACT_USER = "MapReceiver.class";
     private List<Data> user;
+
     public MapPresenter(Context context) {
         super();
         this.context = context;
@@ -53,19 +54,18 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
     }
 
 
-
-    public void getRelation(String token){
+    public void getRelation(String token) {
 
         SendJSONToServer.sendJsonToServer(CreateJSON.listRelation(token));
 //        getView().showLoading();
     }
 
 
-    private void regReceiver(){
+    private void regReceiver() {
         mapReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                switch (intent.getAction()){
+                switch (intent.getAction()) {
                     case GET_RELATIONS:
                         Users userRelation = intent.getExtras().getParcelable(ABSTRACT_USER);
                         user.addAll(userRelation.getData());
@@ -75,6 +75,7 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
 
                     case GET_UPDATE_USER:
                         User updateUser = intent.getExtras().getParcelable(ABSTRACT_USER);
+                        Log.d("users", updateUser.getData().getName());
                         getView().updateUser(updateUser.getData());
 //                        user.add(dataUser);
                         break;
@@ -85,7 +86,6 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
                 user.clear();
 
 
-
 //                Users u = intent.getExtras().getParcelable(GET_RELATIONS);
 //                getView().updateRelation(u);
             }
@@ -94,18 +94,18 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
         IntentFilter intentFilter = new IntentFilter(ABSTRACT_USER);
         intentFilter.addAction(GET_RELATIONS);
         intentFilter.addAction(GET_UPDATE_USER);
-        context.registerReceiver(mapReceiver,intentFilter);
+        context.registerReceiver(mapReceiver, intentFilter);
     }
 
-    private ArrayList<ImageView> inflateImageData(){
+    private ArrayList<ImageView> inflateImageData() {
 
-        ArrayList <ImageView> images =  new ArrayList<ImageView>();
-        for (int i = 0; i<user.size(); i++){
+        ArrayList<ImageView> images = new ArrayList<ImageView>();
+        for (int i = 0; i < user.size(); i++) {
             ImageView imageView = new ImageView(context);
 
 
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30,30);
-            layoutParams.gravity= Gravity.CENTER;
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
+            layoutParams.gravity = Gravity.CENTER;
             imageView.setLayoutParams(layoutParams);
             Picasso.with(context)
                     .load(Const.IMAGE_URL + user.get(i).getLinkToImage())

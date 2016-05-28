@@ -57,6 +57,7 @@ public class SocketAdapter extends WebSocketAdapter {
         try {
             JSONObject json = new JSONObject(text);
             String method = json.getString("method");
+            Log.d("methods",method);
             Intent intent;
 
             switch (method) {

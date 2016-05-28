@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,10 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import de.greenrobot.event.EventBus;
 import de.hdodenhof.circleimageview.CircleImageView;
 import klep.wehere.DbHelper;
 import klep.wehere.R;
 import klep.wehere.common.BaseFragment;
+import klep.wehere.event.UserClick;
 import klep.wehere.model.users.Data;
 import klep.wehere.utils.Const;
 import nl.qbusict.cupboard.QueryResultIterable;
@@ -37,7 +40,7 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 /**
  * Created by klep.io on 12.03.16.
  */
-public class FragmentListPeople extends BaseFragment implements View.OnClickListener {
+public class FragmentListPeople extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
     private SQLiteDatabase db;
     List<Data> userList = new ArrayList<>();
     private Adapter adapter;
@@ -84,14 +87,20 @@ public class FragmentListPeople extends BaseFragment implements View.OnClickList
             lessonsCursor.close();
         }
         adapter = new Adapter(userList, getActivity());
-
         ListView lvMain = (ListView) view.findViewById(R.id.adapter);
         lvMain.setAdapter(adapter);
+        lvMain.setOnItemClickListener(this);
+
     }
 
     @Override
     public void onClick(View v) {
         getActivity().finish();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        EventBus.getDefault().postSticky(new UserClick(userList.get(position)));
     }
 }
 

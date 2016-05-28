@@ -32,8 +32,10 @@ public class HandleActivity extends BaseActivity {
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 switch (menuItemId) {
                     case R.id.bottomMap:
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragmentPlace, MapsFragment.newInstance()).commit();
+                        if (savedInstanceState == null) {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragmentPlace, MapsFragment.newInstance()).commit();
+                        }
                         break;
                     case R.id.bottomUser:
                         startActivity(new Intent(getApplicationContext(), ActivityListUser.class));

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +28,13 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 import klep.wehere.DbHelper;
 import klep.wehere.R;
 import klep.wehere.addChildren.RegActivityChild;
 import klep.wehere.common.BaseViewStateFragment;
 import klep.wehere.common.LoadingDialogFragment;
+import klep.wehere.event.UserClick;
 import klep.wehere.model.users.Data;
 import klep.wehere.utils.Const;
 
@@ -82,8 +85,6 @@ public class MapsFragment extends BaseViewStateFragment<MapView, MapPresenter>
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         ButterKnife.bind(this, view);
-
-
         setUpMap();
         if (users == null) {
             users = new ArrayList<>();
@@ -91,6 +92,26 @@ public class MapsFragment extends BaseViewStateFragment<MapView, MapPresenter>
 
 
         return view;
+    }
+
+    public void onEvent(UserClick event) {
+        Log.d("sds", event.getData().getName());
+//        showCameraOnPerson(event.getData().getName());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().registerSticky(this);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+
     }
 
     private void setUpMap() {
@@ -111,7 +132,7 @@ public class MapsFragment extends BaseViewStateFragment<MapView, MapPresenter>
     public void onResume() {
         super.onResume();
 //        mapView.onResume();
-
+        Log.d("users", "" + users.size());
         if (users.size() == 0) {
             String token = Hawk.get(Const.TOKEN);
             presenter.getRelation(token);
