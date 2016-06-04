@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,6 @@ import klep.wehere.R;
 import klep.wehere.common.BaseFragment;
 import klep.wehere.event.UserClick;
 import klep.wehere.model.users.Data;
-import klep.wehere.utils.Const;
 import nl.qbusict.cupboard.QueryResultIterable;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
@@ -145,9 +143,7 @@ class Adapter extends BaseAdapter {
         Data data = users.get(position);
 
         nameUser.setText(data.getName());
-        Picasso.with(context)
-                .load(Const.IMAGE_URL + data.getLinkToImage())
-                .into(imageUser);
+
 
         return view;
     }

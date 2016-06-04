@@ -5,12 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
-import android.view.Gravity;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +14,6 @@ import java.util.List;
 import klep.wehere.model.user.User;
 import klep.wehere.model.users.Data;
 import klep.wehere.model.users.Users;
-import klep.wehere.utils.Const;
 import klep.wehere.utils.CreateJSON;
 import klep.wehere.utils.SendJSONToServer;
 
@@ -97,23 +92,5 @@ public class MapPresenter extends MvpBasePresenter<MapView> {
         context.registerReceiver(mapReceiver, intentFilter);
     }
 
-    private ArrayList<ImageView> inflateImageData() {
 
-        ArrayList<ImageView> images = new ArrayList<ImageView>();
-        for (int i = 0; i < user.size(); i++) {
-            ImageView imageView = new ImageView(context);
-
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
-            layoutParams.gravity = Gravity.CENTER;
-            imageView.setLayoutParams(layoutParams);
-            Picasso.with(context)
-                    .load(Const.IMAGE_URL + user.get(i).getLinkToImage())
-                    .into(imageView);
-            images.add(imageView);
-        }
-
-
-        return images;
-    }
 }
