@@ -31,8 +31,19 @@ public class Data implements Parcelable {
     @SerializedName("link_to_image")
     @Expose
     public String linkToImage;
+    @SerializedName("id")
+    @Expose
+    public int id;
 
     public Data() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getLinkToImage() {

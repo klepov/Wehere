@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
     >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_user_edit"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar"
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -43,14 +51,14 @@
             />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/edit_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
             android:layout_alignStart="@+id/user_child_count"
             android:layout_below="@+id/user_child_count"
             android:background="@drawable/button_shape_blue"
             android:text="Редактировать профиль"
+            android:textColor="@color/colorPrimary"
             />
 
     </RelativeLayout>

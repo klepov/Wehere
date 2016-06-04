@@ -1,5 +1,6 @@
 package klep.wehere.listPeople
 
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
@@ -16,6 +17,7 @@ import klep.wehere.DbHelper
 import klep.wehere.R
 import klep.wehere.common.BaseFragment
 import klep.wehere.model.users.Data
+import klep.wehere.registration.RegActivity
 import klep.wehere.utils.Const
 import kotlinx.android.synthetic.main.fragment_profile.*
 import nl.qbusict.cupboard.CupboardFactory.cupboard
@@ -24,7 +26,8 @@ import nl.qbusict.cupboard.CupboardFactory.cupboard
  * Created by klep on 04.06.16 with love.
  */
 
-class ProfileFragment : BaseFragment() {
+class ProfileFragment : BaseFragment(), View.OnClickListener {
+
     var db: SQLiteDatabase? = null
 
     private var adapter: FastItemAdapter<UserItem>? = null
@@ -52,7 +55,7 @@ class ProfileFragment : BaseFragment() {
         recycler.layoutManager = layoutManager
 
         adapter = FastItemAdapter<UserItem>().apply {
-            withOnClickListener({ view, iAdapter, item, i -> false })
+            withOnClickListener({ view, adapter, item, i -> editProfile(adapter.getItem(i).data);false })
             recycler.adapter = this
         }
         val allah = cupboard()
@@ -63,7 +66,21 @@ class ProfileFragment : BaseFragment() {
         } finally {
             cursor.close()
         }
+        edit_profile.setOnClickListener(this)
     }
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.edit_profile -> editProfile(Hawk.get(Const.USER))
+        }
+    }
+
+    private fun editProfile(id: Data) {
+        val intent = Intent(activity, RegActivity::class.java)
+        intent.putExtra(Const.ID_CHANGE, id)
+        startActivity(intent)
+    }
+
 }
 
 class UserItem(val data: Data) : AbstractItem<UserItem, UserHolder>() {
