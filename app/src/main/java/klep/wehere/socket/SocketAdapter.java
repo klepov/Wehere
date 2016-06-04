@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.orhanobut.hawk.Hawk;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +18,9 @@ import java.util.Map;
 import de.greenrobot.event.EventBus;
 import klep.wehere.auth.AuthPresenter;
 import klep.wehere.model.user.User;
+import klep.wehere.model.users.Data;
 import klep.wehere.model.users.Users;
+import klep.wehere.utils.Const;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -57,12 +60,14 @@ public class SocketAdapter extends WebSocketAdapter {
         try {
             JSONObject json = new JSONObject(text);
             String method = json.getString("method");
-            Log.d("methods",method);
+            Log.d("methods", method);
             Intent intent;
 
             switch (method) {
                 case AUTH:
                     int code = new JSONObject(json.getString("data")).getInt("code");
+                    Data data = new Gson().fromJson(json.getString("user"), Data.class);
+                    Hawk.put(Const.USER, data);
                     intent = new Intent(AuthPresenter.EngineReceiver);
                     intent.putExtra(AuthPresenter.WS_AUTH, code);
                     context.sendBroadcast(intent);

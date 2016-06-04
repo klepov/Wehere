@@ -10,7 +10,7 @@ import com.roughike.bottombar.OnMenuTabClickListener;
 
 import klep.wehere.R;
 import klep.wehere.common.BaseActivity;
-import klep.wehere.listPeople.ActivityListUser;
+import klep.wehere.listPeople.ProfileFragment;
 import klep.wehere.services.UpdateLocationService;
 
 public class HandleActivity extends BaseActivity {
@@ -38,7 +38,10 @@ public class HandleActivity extends BaseActivity {
                         }
                         break;
                     case R.id.bottomUser:
-                        startActivity(new Intent(getApplicationContext(), ActivityListUser.class));
+                        if (savedInstanceState == null) {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragmentPlace, new ProfileFragment()).commit();
+                        }
                         break;
                 }
             }

@@ -16,10 +16,10 @@ public class ActivityListUser extends AppCompatActivity {
         setContentView(R.layout.activity_list_user);
 
 
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, new FragmentListPeople())
-                    .commit();
-        }
+//        if (savedInstanceState == null) {
+//            getFragmentManager().beginTransaction()
+//                    .replace(R.id.fragmentContainer, new FragmentListPeople())
+//                    .commit();
+//        }
     }
 }
