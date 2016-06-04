@@ -29,6 +29,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import klep.wehere.R;
+import klep.wehere.model.EditCredentials;
 import klep.wehere.model.RegistrationCredentials;
 import klep.wehere.model.image.CreateImage;
 import klep.wehere.model.users.Data;
@@ -56,6 +57,7 @@ public abstract class RegFragment extends BaseViewStateFragment<RegView, RegPres
     Toolbar toolbar;
     public RegOk regOk;
     String path;
+    private Data data;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public abstract class RegFragment extends BaseViewStateFragment<RegView, RegPres
             presenter.resizeImage(path);
         }
         if (getArguments().getParcelable(Const.ID_CHANGE) != null) {
-            Data data = getArguments().getParcelable(Const.ID_CHANGE);
+            data = getArguments().getParcelable(Const.ID_CHANGE);
             loginEdit.setVisibility(View.GONE);
             password1Edit.setVisibility(View.GONE);
             password2Edit.setVisibility(View.GONE);
@@ -100,39 +102,53 @@ public abstract class RegFragment extends BaseViewStateFragment<RegView, RegPres
 
     @OnClick(R.id.btn_Reg)
     public void onRegClicked() {
-        String login = loginEdit.getText().toString();
-        String password1 = password1Edit.getText().toString();
-        String password2 = password2Edit.getText().toString();
-        String nameReg = nameRegEdit.getText().toString();
-        if (TextUtils.isEmpty(login)) {
-            loginEdit.clearAnimation();
-            Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
-            loginEdit.startAnimation(shake);
-            return;
-        } else if (TextUtils.isEmpty(password1)) {
-            password1Edit.clearAnimation();
-            Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
-            password1Edit.startAnimation(shake);
-            return;
-        } else if (TextUtils.isEmpty(password2)) {
-            password2Edit.clearAnimation();
-            Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
-            password2Edit.startAnimation(shake);
-            return;
-        } else if (TextUtils.isEmpty(nameReg)) {
-            nameRegEdit.clearAnimation();
-            Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
-            nameRegEdit.startAnimation(shake);
-            return;
-        } else if (!password1.equals(password2)) {
-            showRegError(3);
-            return;
+        if (data == null) {
+            String login = loginEdit.getText().toString();
+            String password1 = password1Edit.getText().toString();
+            String password2 = password2Edit.getText().toString();
+            String nameReg = nameRegEdit.getText().toString();
+            if (TextUtils.isEmpty(login)) {
+                loginEdit.clearAnimation();
+                Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
+                loginEdit.startAnimation(shake);
+                return;
+            } else if (TextUtils.isEmpty(password1)) {
+                password1Edit.clearAnimation();
+                Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
+                password1Edit.startAnimation(shake);
+                return;
+            } else if (TextUtils.isEmpty(password2)) {
+                password2Edit.clearAnimation();
+                Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
+                password2Edit.startAnimation(shake);
+                return;
+            } else if (TextUtils.isEmpty(nameReg)) {
+                nameRegEdit.clearAnimation();
+                Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
+                nameRegEdit.startAnimation(shake);
+                return;
+            } else if (!password1.equals(password2)) {
+                showRegError(3);
+                return;
+            }
+            presenter.doReg(new RegistrationCredentials(login,
+                    password1,
+                    password2,
+                    nameReg,
+                    CreateImage.makeImage(path)));
+        } else {
+            String nameReg = nameRegEdit.getText().toString();
+            if (TextUtils.isEmpty(nameReg)) {
+                nameRegEdit.clearAnimation();
+                Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
+                nameRegEdit.startAnimation(shake);
+                return;
+            }
+            presenter.doEdit(new EditCredentials(nameReg,
+                    data.getUser(),
+                    data.getId(),
+                    CreateImage.makeImage(path)));
         }
-        presenter.doReg(new RegistrationCredentials(login,
-                password1,
-                password2,
-                nameReg,
-                CreateImage.makeImage(path)));
     }
 
     @Override
@@ -155,7 +171,6 @@ public abstract class RegFragment extends BaseViewStateFragment<RegView, RegPres
                 .setPickerSpanCount(5)
                 .setCamera(true)//you can use camera
                 .startAlbum();
-
     }
 
     @Override
@@ -188,7 +203,6 @@ public abstract class RegFragment extends BaseViewStateFragment<RegView, RegPres
     public void showRegError(int error) {
         RegViewState vs = (RegViewState) viewState;
         vs.setStateShowError();
-
         Snackbar.make(getView(), ErrorCode.getCodeError(getActivity(), error), Snackbar.LENGTH_LONG)
                 .show();
     }
