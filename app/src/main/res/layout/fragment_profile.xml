@@ -44,10 +44,12 @@
 
         <Button
             android:id="@+id/button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
             android:layout_alignStart="@+id/user_child_count"
             android:layout_below="@+id/user_child_count"
+            android:background="@drawable/button_shape_blue"
             android:text="Редактировать профиль"
             />
 
@@ -57,16 +59,16 @@
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:alpha="0.12"
         android:background="@color/md_black_1000"
         />
 
-    <GridLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_user"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-
-    </GridLayout>
+        android:layout_gravity="center_vertical|center"
+        />
 
 </LinearLayout>
