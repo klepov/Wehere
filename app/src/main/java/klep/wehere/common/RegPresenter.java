@@ -2,7 +2,6 @@ package klep.wehere.common;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.orhanobut.hawk.Hawk;
@@ -14,6 +13,7 @@ import klep.wehere.model.error.ErrorHandlerModel;
 import klep.wehere.model.image.ResizeImage;
 import klep.wehere.model.image.ResizeImageImpl;
 import klep.wehere.model.token.Token;
+import klep.wehere.model.users.Data;
 import klep.wehere.utils.Const;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -29,7 +29,6 @@ public abstract class RegPresenter extends MvpBasePresenter<RegView> {
     public void resizeImage(String path) {
         Bitmap bitmap = BitmapFactory.decodeFile(path);
         ResizeImage resizeImage = new ResizeImageImpl();
-
         resizeImage.doResize(bitmap)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -85,6 +84,10 @@ public abstract class RegPresenter extends MvpBasePresenter<RegView> {
                     @Override
                     public void onNext(ErrorHandlerModel errorHandlerModel) {
                         if (errorHandlerModel.getData().getCode() == 99) {
+                            Data data = Hawk.get(Const.USER);
+                            data.setLinkToImage(errorHandlerModel.getUrl());
+                            data.setName(errorHandlerModel.getName());
+                            Hawk.put(Const.USER, data);
                             getView().showRegComplete();
                         } else if (errorHandlerModel.getData().getCode() == 7) {
                             getView().showRegError(7);

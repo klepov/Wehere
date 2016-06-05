@@ -5,7 +5,10 @@ import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -31,16 +34,15 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
     var db: SQLiteDatabase? = null
 
     private var adapter: FastItemAdapter<UserItem>? = null
-    private var recycler: RecyclerView? = null
-
 
     override fun getLayoutRes(): Int {
         return R.layout.fragment_profile
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onResume() {
+        super.onResume()
         val data = Hawk.get<Data>(Const.USER)
+        Log.d("asd","onViewCreated")
         name_user.text = data.name
         Glide.with(this).load(Const.IMAGE_URL + data.linkToImage).into(image_user)
         val dbHelper = DbHelper(context)
@@ -58,16 +60,17 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             withOnClickListener({ view, adapter, item, i -> editProfile(adapter.getItem(i).data);false })
             recycler.adapter = this
         }
-        val allah = cupboard()
+        val db = cupboard()
                 .withCursor(cursor)
                 .iterate(Data::class.java)
         try {
-            adapter?.set(allah.map { UserItem(it) })
+            adapter?.set(db.map { UserItem(it) })
         } finally {
             cursor.close()
         }
         edit_profile.setOnClickListener(this)
     }
+
 
     override fun onClick(v: View) {
         when (v.id) {

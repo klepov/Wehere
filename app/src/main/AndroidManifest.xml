@@ -52,12 +52,6 @@
             android:label="@string/app_name"
             />
 
-        <activity
-            android:name=".listPeople.ActivityListUser"
-            android:label="@string/app_name"
-
-            />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDUvmoX9JSoyaMEeOFFixIlBpgmdBYXups"
