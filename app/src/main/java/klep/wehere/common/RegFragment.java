@@ -74,7 +74,7 @@ public abstract class RegFragment extends BaseViewStateFragment<RegView, RegPres
             path = savedInstanceState.getString("path");
             presenter.resizeImage(path);
         }
-        if (getArguments().getParcelable(Const.ID_CHANGE) != null) {
+        if (getArguments()!= null) {
             data = getArguments().getParcelable(Const.ID_CHANGE);
             loginEdit.setVisibility(View.GONE);
             password1Edit.setVisibility(View.GONE);

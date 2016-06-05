@@ -18,19 +18,19 @@
             android:layout_height="match_parent"
             />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/FAB_start_reg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/map1"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentStart="false"
-            android:layout_alignRight="@+id/map1"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_accessibility_white_48dp"
-            app:borderWidth="0dp"
-            />
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/FAB_start_reg"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignBottom="@+id/map1"-->
+            <!--android:layout_alignParentEnd="false"-->
+            <!--android:layout_alignParentStart="false"-->
+            <!--android:layout_alignRight="@+id/map1"-->
+            <!--android:layout_gravity="bottom|end"-->
+            <!--android:layout_margin="16dp"-->
+            <!--android:src="@drawable/ic_accessibility_white_48dp"-->
+            <!--app:borderWidth="0dp"-->
+            <!--/>-->
 
 
     </FrameLayout>

@@ -230,11 +230,6 @@ public class MapsFragment extends BaseViewStateFragment<MapView, MapPresenter>
         return new MapViewState();
     }
 
-    @OnClick(R.id.FAB_start_reg)
-    public void StartChildReg() {
-        getContext().startActivity(new Intent(getActivity(), RegActivityChild.class));
-    }
-
     private void showPersonAlways() {
         if (filter != null) {
             CameraPosition cameraPosition = new CameraPosition.Builder()

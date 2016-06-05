@@ -14,6 +14,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar"
         />
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,10 +36,10 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/name_user"
             android:layout_below="@+id/name_user"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="Иван кеков"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="4dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="Иван кеков"
             />
 
         <Button
@@ -56,14 +57,15 @@
             android:id="@+id/name_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="16dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             tools:text="Иван кеков"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
             />
 
     </RelativeLayout>
+
 
     <View
         android:layout_width="wrap_content"
@@ -74,11 +76,31 @@
         android:background="@color/md_black_1000"
         />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_user"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical|center"
-        />
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_user"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center"
+            />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/FAB_start_reg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/map1"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentStart="false"
+            android:layout_alignRight="@+id/map1"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_accessibility_white_48dp"
+            app:borderWidth="0dp"
+            />
+    </FrameLayout>
 
 </LinearLayout>

@@ -2,13 +2,10 @@ package klep.wehere.listPeople
 
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
-import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -18,10 +15,12 @@ import com.mikepenz.fastadapter.utils.ViewHolderFactory
 import com.orhanobut.hawk.Hawk
 import klep.wehere.DbHelper
 import klep.wehere.R
+import klep.wehere.addChildren.RegActivityChild
 import klep.wehere.common.BaseFragment
 import klep.wehere.model.users.Data
 import klep.wehere.registration.RegActivity
 import klep.wehere.utils.Const
+import kotlinx.android.synthetic.main.fragment_maps.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import nl.qbusict.cupboard.CupboardFactory.cupboard
 
@@ -42,7 +41,7 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         val data = Hawk.get<Data>(Const.USER)
-        Log.d("asd","onViewCreated")
+        Log.d("asd", "onViewCreated")
         name_user.text = data.name
         Glide.with(this).load(Const.IMAGE_URL + data.linkToImage).into(image_user)
         val dbHelper = DbHelper(context)
@@ -69,6 +68,10 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             cursor.close()
         }
         edit_profile.setOnClickListener(this)
+        FAB_start_reg.setOnClickListener({
+            context.startActivity(Intent(activity, RegActivityChild::class.java)
+            )
+        })
     }
 
 

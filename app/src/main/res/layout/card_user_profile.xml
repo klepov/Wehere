@@ -2,6 +2,7 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="120dp"
@@ -20,13 +21,16 @@
             android:id="@+id/family_user_image"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            tools:layout_width="80dp"
+            tools:layout_height="80dp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:contentDescription="@string/action_settings"
-            android:src="@color/accent"
+            tools:src="@color/accent"
             />
 
         <TextView
+            tools:text="Иван Уебанов"
             android:id="@+id/family_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
