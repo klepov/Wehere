@@ -72,6 +72,7 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             context.startActivity(Intent(activity, RegActivityChild::class.java)
             )
         })
+    
     }
 
 
